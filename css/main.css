@@ -1,0 +1,10 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#myCanvas {
+    padding-top: 8%;
+    padding-left: 30%;
+    padding-right: 30%;
+}
