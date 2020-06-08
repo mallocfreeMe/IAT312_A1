@@ -1,19 +1,25 @@
 class  Antlion {
   PVector pos, vel;
-  float angle = 0;
+  float w,h;
   
-  Antlion() {  
-    pos = new PVector(400, 500);
+  Antlion(float x, float y, float w, float h, float vy) {  
+    pos = new PVector(x, y);
+    vel = new PVector(0, vy);
+    this.w = w;
+    this.h = h;
   }
   void display() {
     fill(0);
-    rect(pos.x-50, pos.y-50, 100, 100);
+    rect(0, 600, w, h);
   }
-  void update(Player p) { 
+  void update() { 
+    //pos.add(vel);
+    if(isAttack == true) {
+      pos.y -= 100;
+    }
+    else {
+      pos.y = 0;
+    }
     display();
-    angle = atan2(p.y- pos.y, p.x-pos.x); 
-    PVector vel = PVector.fromAngle(angle);
-    vel.mult(1);
-    pos.add(vel);
   }
 }

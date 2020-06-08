@@ -31,6 +31,7 @@ Antlion antlion;
 ArrayList<Enemy> enemies1;
 ArrayList<Enemy> enemies2;
 ArrayList<Seawead> seaweads;
+Background bg;
 
 // Score
 int foodNum = 0;
@@ -45,6 +46,10 @@ int L_THREE = 3;
 int level = L_ONE;
 
 boolean left, right, up;
+boolean isAttack = false;
+
+// Timer
+int attackTimer=0;
 
 void setup() {
   size(1080, 700);
@@ -100,42 +105,48 @@ void setup() {
 
   // initialize platforms
   platforms = new ArrayList<Platform>();
+  for (int i=-1400; i<600; i=i+150){
+    float randpx = random(4) * 100;
+    float randpx2 = random(5,10) *100;
+    platforms.add(new Platform(randpx, i, 200, 25, 0.25));
+    platforms.add(new Platform(randpx2, i, 200, 25, 0.25));
+  }
   //platforms.add(new Platform(300, 1000, 200, 25));
   //platforms.add(new Platform(500, 900, 200, 25));
   //platforms.add(new Platform(800, 800, 200, 25));
   //platforms.add(new Platform(500, 700, 200, 25));
-  platforms.add(new Platform(300, 600, 200, 25));
-  platforms.add(new Platform(500, 500, 200, 25));
-  platforms.add(new Platform(800, 400, 200, 25));
-  platforms.add(new Platform(500, 300, 200, 25));
-  platforms.add(new Platform(700, 200, 200, 25));
-  platforms.add(new Platform(300, 100, 200, 25));
+  //platforms.add(new Platform(300, 600, 200, 25, 0.25));
+  //platforms.add(new Platform(500, 500, 200, 25, 0.25));
+  //platforms.add(new Platform(800, 400, 200, 25, 0.25));
+  //platforms.add(new Platform(500, 300, 200, 25, 0.25));
+  //platforms.add(new Platform(700, 200, 200, 25, 0.25));
+  //platforms.add(new Platform(300, 100, 200, 25, 0.25));
 
 
   platforms3 = new ArrayList<Platform>();
-  platforms3.add(new Platform(500, 550, 200, 25));
-  platforms3.add(new Platform(250, 400, 200, 25));
-  platforms3.add(new Platform(750, 400, 200, 25));
-  platforms3.add(new Platform(500, 250, 200, 25));
+  platforms3.add(new Platform(500, 550, 200, 25, 0.3));
+  platforms3.add(new Platform(250, 400, 200, 25, 0.3));
+  platforms3.add(new Platform(750, 400, 200, 25, 0.3));
+  platforms3.add(new Platform(500, 250, 200, 25, 0.3));
 
   //initialize food
   foods = new ArrayList<Food>();
   //foods.add(new Food(550, 900, 25, 25));
   //foods.add(new Food(350, 1000, 25, 25));
-  foods.add(new Food(350, 600, 25, 25));
-  foods.add(new Food(550, 500, 25, 25));
-  foods.add(new Food(850, 400, 25, 25));
-  foods.add(new Food(550, 300, 25, 25));
+  foods.add(new Food(350, 600, 25, 25, 0.25));
+  foods.add(new Food(550, 500, 25, 25, 0.25));
+  foods.add(new Food(850, 400, 25, 25, 0.25));
+  foods.add(new Food(550, 300, 25, 25, 0.25));
 
   foods2 = new ArrayList<Food>();
   for (int i = 0; i < 8; i++) {
     float rx = random(1080);
     float ry = random(700);
-    foods2.add(new Food(rx, ry, 25, 25));
+    foods2.add(new Food(rx, ry, 25, 25, 0));
   }
 
   // initiallize antlion
-  //antlion = new Antlion();
+  antlion = new Antlion(0,0,width,500,0);
 
 
   // initialize enemy
@@ -156,6 +167,11 @@ void setup() {
     float ry = random(700);
     seaweads.add(new Seawead(rx, ry, 75, 75));
   }
+  
+  
+  // initialize background
+  bg = new Background(0, 0, width, height, 0.25);
+  
 
   // initialize boolean variables
   left = false;
@@ -166,6 +182,18 @@ void setup() {
 
 void draw() {
   levelCheck();
+  
+  // Attack timer
+  attackTimer ++;
+  if(attackTimer >= 600){
+    isAttack = true;
+  }
+  if(attackTimer >= 720) {
+    isAttack = false;
+    attackTimer = 0;
+  }
+  
+  
 
   // ---------------- Menu --------------------
   if (level == L_MENU) {
@@ -180,13 +208,14 @@ void draw() {
   // ---------------- LEVEL 1 --------------------
   if (level == L_ONE) {
     background(255);
+    bg.update();
     setText();
     player.update();
 
     // Check the collision of player and platform & DIsplay the platform
     for (int i = 0; i < platforms.size(); i++) {
       Platform p = platforms.get(i);
-      p.display();
+      p.update();
 
       rectangleCollisions(player, p);
       player.checkPlatforms();
@@ -195,7 +224,7 @@ void draw() {
     // Display the foods
     for (int i=0; i<foods.size(); i++) {
       Food f = foods.get(i);
-      f.display();
+      f.update();
 
       boolean foodCollision = collectCollision(player, f);
       if (foodCollision) {
@@ -215,14 +244,17 @@ void draw() {
         println("You're hitted");
       }
     }
+    
+    // Display antlion
+    antlion.update();
+    
+    
 
     // Check the boundaries
     player.checkBoundaries();
 
     // Display
     player.display();
-
-    //antlion.update(player);
   }
 
   // --------------- LEVEL 2 -------------------
@@ -234,7 +266,7 @@ void draw() {
 
     for (int i=0; i<foods2.size(); i++) {
       Food f = foods2.get(i);
-      f.display();
+      f.update();
 
       boolean foodCollision = collectCollision(player2, f);
       if (foodCollision) {
@@ -282,7 +314,7 @@ void draw() {
     // Check the collision of player and platform & DIsplay the platform
     for (int i = 0; i < platforms3.size(); i++) {
       Platform p = platforms3.get(i);
-      p.display();
+      p.update();
 
       rectangleCollisions(player3, p);
       player3.checkPlatforms();
