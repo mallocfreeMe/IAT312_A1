@@ -38,6 +38,7 @@ ArrayList<Enemy> enemies1;
 ArrayList<Enemy> enemies2;
 ArrayList<Seawead> seaweads;
 Background bg;
+Door door;
 
 // Score
 int foodNum = 0;
@@ -57,6 +58,7 @@ int level = L_OVER;
 
 boolean left, right, up;
 boolean isAttack = false;
+boolean isBack = false;
 
 // Timer
 int attackTimer=0;
@@ -140,28 +142,42 @@ void setup() {
   lostImage.resize(320, 300);
 
   // initialize player
-  player = new Player(50, 600, 50, 50, 0, 0);
+  player = new Player(200, 300, 50, 50, 0, 0);
   player2 = new Player(50, 350, 50, 50, 0, 0);
   player3 = new Player(50, 600, 50, 50, 0, 0);
 
   // initialize platforms
   platforms = new ArrayList<Platform>();
-  for (int i=-1400; i<600; i=i+150) {
-    float randpx = random(4) * 100;
-    float randpx2 = random(5, 10) *100;
-    platforms.add(new Platform(randpx, i, 200, 25, 0.25));
-    platforms.add(new Platform(randpx2, i, 200, 25, 0.25));
-  }
+  //for (int i=-1400; i<600; i=i+150){
+  //  float randpx = random(4) * 100;
+  //  float randpx2 = random(5,10) *100;
+  //  platforms.add(new Platform(randpx, i, 200, 25, 0.25));
+  //  platforms.add(new Platform(randpx2, i, 200, 25, 0.25));
+  //}
   //platforms.add(new Platform(300, 1000, 200, 25));
   //platforms.add(new Platform(500, 900, 200, 25));
   //platforms.add(new Platform(800, 800, 200, 25));
   //platforms.add(new Platform(500, 700, 200, 25));
-  //platforms.add(new Platform(300, 600, 200, 25, 0.25));
-  //platforms.add(new Platform(500, 500, 200, 25, 0.25));
-  //platforms.add(new Platform(800, 400, 200, 25, 0.25));
-  //platforms.add(new Platform(500, 300, 200, 25, 0.25));
-  //platforms.add(new Platform(700, 200, 200, 25, 0.25));
-  //platforms.add(new Platform(300, 100, 200, 25, 0.25));
+  platforms.add(new Platform(200, 400, 200, 25, 0.25));
+  platforms.add(new Platform(300, 600, 200, 25, 0.25));
+  platforms.add(new Platform(500, 500, 200, 25, 0.25));
+  platforms.add(new Platform(800, 400, 200, 25, 0.25));
+  platforms.add(new Platform(500, 300, 200, 25, 0.25));
+  platforms.add(new Platform(700, 200, 200, 25, 0.25));
+  platforms.add(new Platform(300, 100, 200, 25, 0.25));
+  platforms.add(new Platform(650, 0, 200, 25, 0.25));
+  platforms.add(new Platform(800, -100, 200, 25, 0.25));
+  platforms.add(new Platform(500, -200, 200, 25, 0.25));
+  platforms.add(new Platform(100, -300, 200, 25, 0.25));
+  platforms.add(new Platform(450, -400, 200, 25, 0.25));
+  platforms.add(new Platform(100, -500, 200, 25, 0.25));
+  platforms.add(new Platform(500, -600, 200, 25, 0.25));
+  platforms.add(new Platform(650, -700, 200, 25, 0.25));
+  platforms.add(new Platform(700, -800, 200, 25, 0.25));
+  platforms.add(new Platform(300, -900, 200, 25, 0.25));
+  platforms.add(new Platform(0, -1000, 200, 25, 0.25));
+  platforms.add(new Platform(300, -1100, 200, 25, 0.25));
+  platforms.add(new Platform(500, -1200, 200, 25, 0.25));
 
 
   platforms3 = new ArrayList<Platform>();
@@ -187,7 +203,7 @@ void setup() {
   }
 
   // initiallize antlion
-  antlion = new Antlion(0, 0, width, 500, 0);
+  antlion = new Antlion(300,600,500,500,0,0);
 
 
   // initialize enemy
@@ -228,9 +244,14 @@ void draw() {
   attackTimer ++;
   if (attackTimer >= 600) {
     isAttack = true;
+    isBack = false;
+  }
+  if(attackTimer >= 660){
+    isAttack = true;
   }
   if (attackTimer >= 720) {
     isAttack = false;
+    isBack = true;
     attackTimer = 0;
   }
 
@@ -256,6 +277,7 @@ void draw() {
   if (level == L_ONE) {
     background(255);
     bg.update();
+    //door.update();
     setText();
     player.update();
 
@@ -294,6 +316,10 @@ void draw() {
 
     // Display antlion
     antlion.update();
+    boolean bossCollision = bossCollision(player, antlion);
+      if (bossCollision) {
+        isOver = true;
+      }
 
 
 
@@ -474,6 +500,32 @@ Boolean enemyCollision(Player ep, Enemy ee) {
   }
   return false;
 }
+
+Boolean bossCollision(Player bp, Antlion bb) {
+  float player_x_left = (bb.x)-(bp.x+bp.w);
+  float player_x_right = (bp.x)-(bb.x+bb.w);
+  float player_y_top = (bb.y)-(bp.y+bp.h);
+  float player_y_bottom = (bp.y) - (bb.y+bb.h);
+
+  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top <=0 && player_y_bottom <=0) {
+    return true;
+  }
+  return false;
+}
+
+
+Boolean doorCollision(Player dp, Door dd) {
+  float player_x_left = (dd.x-dd.w/2)-(dp.x+dp.w);
+  float player_x_right = (dp.x)-(dd.x+dd.w/2);
+  float player_y_top = (dd.y-dd.h/2)-(dp.y+dp.h);
+  float player_y_bottom = (dp.y) - (dd.y+dd.h/2);
+
+  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top <=0 && player_y_bottom <=0) {
+    return true;
+  }
+  return false;
+}
+
 
 Boolean seaweadCollision(Player sp, Seawead ss) {
   float disx = abs((sp.x+sp.w/2)-(ss.x));

@@ -17,11 +17,18 @@ class Background{
     rect(0,0,w,h);
     fill(0,255, 255);
     rect(0,-h,w,h);
+    fill(128,255, 255);
+    rect(0,-2*h,w,h);
     popMatrix();
   }
   
   void update(){
-    y += vy;
+    if(y < 1400) {
+      y += vy;
+    }
+    if (y >= 1400) {
+      vy = 0;
+    }
     display();
   }
 }
