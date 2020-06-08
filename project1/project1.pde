@@ -54,7 +54,7 @@ int L_ONE = 1;
 int L_TWO = 2;
 int L_THREE = 3;
 
-int level = L_OVER;
+int level = L_MENU;
 
 boolean left, right, up;
 boolean isAttack = false;
