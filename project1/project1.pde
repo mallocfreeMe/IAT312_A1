@@ -13,6 +13,15 @@ import controlP5.*;
 Button startButton;
 Button exitButton;
 
+// music play button
+Button musicButton;
+Minim minim;
+AudioPlayer song;
+boolean playBackgroundMusic =false;
+
+PImage titleImage;
+PImage backgroundImage;
+
 ControlP5 cp5;
 
 Player player, player2, player3;
@@ -38,15 +47,16 @@ int level = L_ONE;
 boolean left, right, up;
 
 void setup() {
-  cp5 = new ControlP5(this);
   size(1080, 700);
+
+  cp5 = new ControlP5(this);
   smooth();
 
   ControlFont cf1 = new ControlFont(createFont("Arial", 20));
 
   // set up the start button
   startButton = cp5.addButton("Start")
-    .setPosition(370, 480)
+    .setPosition(370, 580)
     .setColorActive(color(100)) 
     .setColorLabel(color(0))
     .setColorBackground(color(255))
@@ -56,13 +66,32 @@ void setup() {
 
   // set up the exit button
   exitButton = cp5.addButton("Exit")
-    .setPosition(570, 480)
+    .setPosition(570, 580)
     .setColorActive(color(100)) 
     .setColorLabel(color(0))
     .setColorBackground(color(255))
     .setColorForeground(color(255, 0, 0))
     .setSize(130, 25)
     .setFont(cf1);
+
+  // set music button
+  musicButton = cp5.addButton("music Button")
+    .setColorActive(color(100)) 
+    .setColorLabel(color(0))
+    .setColorBackground(color(255))
+    .setColorForeground(color(255, 0, 0))
+    .setImages()
+    .setPosition(50, 30);
+
+  // Use Minim library
+  minim = new Minim(this);
+  song = minim.loadFile("sound/background.mp3");
+
+  titleImage= loadImage("img/title.png");
+  titleImage.resize(350, 200);
+
+  backgroundImage = loadImage("img/menu.png");
+  backgroundImage.resize(320, 300);
 
   // initialize player
   player = new Player(50, 600, 50, 50, 0, 0);
@@ -140,7 +169,12 @@ void draw() {
 
   // ---------------- Menu --------------------
   if (level == L_MENU) {
-    background(255);
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    image( titleImage, 360, 20);
+    image(backgroundImage, 380, 200);
+  } else {
+    musicButton.hide();
   }
 
   // ---------------- LEVEL 1 --------------------
@@ -418,6 +452,25 @@ void controlEvent(CallbackEvent event) {
     case "/Exit":
       isPlaying = false;
       exit();
+      break;
+
+      // if the music button is pressed
+      // it will play the music
+      // if the music button is pressed again
+      // stop the music
+      // the button will loop the conditions I describe above 
+    case "/music Button":
+      if (playBackgroundMusic) {
+        playBackgroundMusic=false;
+      } else {
+        playBackgroundMusic=true;
+      }
+      if (playBackgroundMusic) {
+        song.rewind();
+        song.play();
+      } else {
+        song.pause();
+      }
       break;
     }
   }
