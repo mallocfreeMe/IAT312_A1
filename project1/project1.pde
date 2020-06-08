@@ -13,7 +13,6 @@ import controlP5.*;
 Button startButton;
 Button exitButton;
 
-// music play button
 Button musicButton;
 Minim minim;
 AudioPlayer song;
@@ -21,6 +20,13 @@ boolean playBackgroundMusic =false;
 
 PImage titleImage;
 PImage backgroundImage;
+
+// game over widgets
+Button playAgainButton;
+Button backButton;
+
+PImage overImage;
+PImage lostImage;
 
 ControlP5 cp5;
 
@@ -38,12 +44,16 @@ int foodNum = 0;
 
 // Level
 boolean isPlaying = false;
+boolean isOver = false;
 
+int L_OVER = -2;
+int L_SELECT = -1;
 int L_MENU = 0;
 int L_ONE = 1;
 int L_TWO = 2;
 int L_THREE = 3;
-int level = L_ONE;
+
+int level = L_OVER;
 
 boolean left, right, up;
 boolean isAttack = false;
@@ -80,7 +90,7 @@ void setup() {
     .setFont(cf1);
 
   // set music button
-  musicButton = cp5.addButton("music Button")
+  musicButton = cp5.addButton("sound")
     .setColorActive(color(100)) 
     .setColorLabel(color(0))
     .setColorBackground(color(255))
@@ -98,6 +108,37 @@ void setup() {
   backgroundImage = loadImage("img/menu.png");
   backgroundImage.resize(320, 300);
 
+  // set playAgainButton
+  playAgainButton = cp5.addButton("play again")
+    .setPosition(370, 580)
+    .setSize(130, 25)
+    .setColorActive(color(100)) 
+    .setColorLabel(color(0))
+    .setColorBackground(color(255))
+    .setColorForeground(color(255, 0, 0))
+    .setImages()
+    .setFont(cf1)
+    .hide();
+
+  // set backButton
+  backButton = cp5.addButton("back")
+    .setPosition(570, 580)
+    .setSize(130, 25)
+    .setColorActive(color(100)) 
+    .setColorLabel(color(0))
+    .setColorBackground(color(255))
+    .setColorForeground(color(255, 0, 0))
+    .setImages()
+    .setFont(cf1)
+    .hide();
+
+  // set over image and lost image
+  overImage=loadImage("img/over.png");
+  overImage.resize(200, 200);
+
+  lostImage=loadImage("img/lost.png");
+  lostImage.resize(320, 300);
+
   // initialize player
   player = new Player(50, 600, 50, 50, 0, 0);
   player2 = new Player(50, 350, 50, 50, 0, 0);
@@ -105,9 +146,9 @@ void setup() {
 
   // initialize platforms
   platforms = new ArrayList<Platform>();
-  for (int i=-1400; i<600; i=i+150){
+  for (int i=-1400; i<600; i=i+150) {
     float randpx = random(4) * 100;
-    float randpx2 = random(5,10) *100;
+    float randpx2 = random(5, 10) *100;
     platforms.add(new Platform(randpx, i, 200, 25, 0.25));
     platforms.add(new Platform(randpx2, i, 200, 25, 0.25));
   }
@@ -146,7 +187,7 @@ void setup() {
   }
 
   // initiallize antlion
-  antlion = new Antlion(0,0,width,500,0);
+  antlion = new Antlion(0, 0, width, 500, 0);
 
 
   // initialize enemy
@@ -167,11 +208,11 @@ void setup() {
     float ry = random(700);
     seaweads.add(new Seawead(rx, ry, 75, 75));
   }
-  
-  
+
+
   // initialize background
   bg = new Background(0, 0, width, height, 0.25);
-  
+
 
   // initialize boolean variables
   left = false;
@@ -182,18 +223,16 @@ void setup() {
 
 void draw() {
   levelCheck();
-  
+
   // Attack timer
   attackTimer ++;
-  if(attackTimer >= 600){
+  if (attackTimer >= 600) {
     isAttack = true;
   }
-  if(attackTimer >= 720) {
+  if (attackTimer >= 720) {
     isAttack = false;
     attackTimer = 0;
   }
-  
-  
 
   // ---------------- Menu --------------------
   if (level == L_MENU) {
@@ -201,8 +240,16 @@ void draw() {
     background(menuColor);
     image( titleImage, 360, 20);
     image(backgroundImage, 380, 200);
+
+    playAgainButton.hide();
+    backButton.hide();
+    startButton.show();
+    exitButton.show();
+    musicButton.show();
   } else {
     musicButton.hide();
+    startButton.hide();
+    exitButton.hide();
   }
 
   // ---------------- LEVEL 1 --------------------
@@ -241,14 +288,14 @@ void draw() {
 
       boolean enemyCollision = enemyCollision(player, e);
       if (enemyCollision) {
-        println("You're hitted");
+        isOver = true;
       }
     }
-    
+
     // Display antlion
     antlion.update();
-    
-    
+
+
 
     // Check the boundaries
     player.checkBoundaries();
@@ -283,7 +330,7 @@ void draw() {
 
       boolean enemyCollision = enemyCollision(player2, e);
       if (enemyCollision) {
-        println("You're hitted22222");
+        isOver =true;
       }
     }
 
@@ -323,6 +370,17 @@ void draw() {
 
     // Check the boundaries
     player3.checkBoundaries();
+  }
+
+  // --------------- LEVEL OVER -------------------
+  if (level == L_OVER) {
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    playAgainButton.show();
+    backButton.show();
+
+    image(lostImage, 400, 20);
+    image(overImage, 420, 280);
   }
 }
 
@@ -447,22 +505,22 @@ void setText() {
 
 void levelCheck() {
   if (!isPlaying) {
-    foodNum = 0;
     level = L_MENU;
   } else {
-    startButton.hide();
-    exitButton.hide();
+    if (!isOver) {
+      level = L_ONE;
 
-    level = L_ONE;
+      if (foodNum >= 3 && player.y < 0 && level == L_ONE) {
+        foodNum = 0;
+        level = L_TWO;
+      }
 
-    if (foodNum >= 3 && player.y < 0 && level == L_ONE) {
-      foodNum = 0;
-      level = L_TWO;
-    }
-
-    if (foodNum >= 5 && player2.x+player2.w > width && level == L_TWO) {
-      foodNum = 0;
-      level = L_THREE;
+      if (foodNum >= 5 && player2.x+player2.w > width && level == L_TWO) {
+        foodNum = 0;
+        level = L_THREE;
+      }
+    } else {
+      level = L_OVER;
     }
   }
 }
@@ -491,7 +549,7 @@ void controlEvent(CallbackEvent event) {
       // if the music button is pressed again
       // stop the music
       // the button will loop the conditions I describe above 
-    case "/music Button":
+    case "/sound":
       if (playBackgroundMusic) {
         playBackgroundMusic=false;
       } else {
@@ -503,6 +561,17 @@ void controlEvent(CallbackEvent event) {
       } else {
         song.pause();
       }
+      break;
+    case "/play again":
+      isOver = false;
+      backButton.hide();
+      playAgainButton.hide();
+      player.x = 50;
+      player.y = 600;
+      break;
+    case "/back":
+      isOver = false;
+      isPlaying = false;
       break;
     }
   }
