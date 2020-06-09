@@ -3,12 +3,15 @@ class Player {
   accX,accY,
   speedLimit,friction,bounce,gravity, gravity2;
   boolean isOnGround;
+  boolean isOnScreenBottom;
   float jumpForce;
   float halfWidth,halfHeight;
   int currentFrame;
   String collisionSide;
   boolean facingRight;
   int frameSequence;
+  
+  PImage img;
 
   Player(float x, float y, float w, float h, float vx, float vy){
     this.x = x;
@@ -25,6 +28,7 @@ class Player {
     gravity = 3;
     gravity2 = 0.2;
     isOnGround = false;
+    isOnScreenBottom = false;
     jumpForce = -10;
 
     halfWidth = w/2;
@@ -33,6 +37,8 @@ class Player {
     currentFrame = 0;
     collisionSide = "";
     frameSequence = 6;
+    
+    img = loadImage("img/playerRight.png");
   }
 
 // --------------- For the LEVEL 1 & 3
@@ -62,6 +68,7 @@ class Player {
       vy += jumpForce;
       isOnGround = false;
       friction = 1;
+      //isOver=true;
     }
 
     vx += accX;
@@ -83,6 +90,15 @@ class Player {
     if (vy > speedLimit * 2){
       vy = speedLimit * 2;
     }
+    
+    
+ // --------------------------- Player die when he touch the bottom ------------------------------------   
+    //if (isOnScreenBottom) {
+    //  isOver = true;
+    //}
+
+// ------------------------------------------------------------------------------------------------------
+
 
     ////move the player
     x+=vx;
@@ -123,6 +139,7 @@ class Player {
     }
     if (y + h > height){
       y = height - h;
+      //isOnScreenBottom = true;
       isOnGround = true;
       vy = -gravity;
     }    
@@ -130,9 +147,10 @@ class Player {
   
   
   void display(){
-    stroke(0);
-    fill(255);
-    rect(x ,y, w, h);
+    //stroke(0);
+    //fill(255);
+    //rect(x ,y, w, h);
+    image(img,x,y,w,h);
     
     
     if (abs(vx)>1 && isOnGround){
@@ -150,9 +168,10 @@ class Player {
 // ------------- For the LEVEL 2
 
   void display2() {
-    fill(255);
-    noStroke();
-    rect(x, y, w, h);
+    //fill(255);
+    //noStroke();
+    //rect(x, y, w, h);
+    image(img,x,y,w,h);
   }
   
   void fall() {

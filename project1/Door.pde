@@ -18,14 +18,7 @@ class Door {
   }
   
   void update(){
-    if(y < 0) {
-      y += vy;
-      println(y);
-    }
-    //if (y >= 0) {
-    //  println(y);
-    //  //
-    //}
+    y+=vy;
     display();
   }
 }

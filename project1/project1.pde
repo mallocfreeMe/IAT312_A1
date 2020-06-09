@@ -36,9 +36,12 @@ ArrayList<Food> foods, foods2, foods3;
 Antlion antlion;
 ArrayList<Enemy> enemies1;
 ArrayList<Enemy> enemies2;
+ArrayList<Enemy> enemies3;
 ArrayList<Seawead> seaweads;
 Background bg;
 Door door;
+Door door2;
+Door door3;
 
 // Score
 int foodNum = 0;
@@ -46,6 +49,7 @@ int foodNum = 0;
 // Level
 boolean isPlaying = false;
 boolean isOver = false;
+boolean isTouchDoor = false;
 
 int L_OVER = -2;
 int L_SELECT = -1;
@@ -54,7 +58,13 @@ int L_ONE = 1;
 int L_TWO = 2;
 int L_THREE = 3;
 
-int level = L_MENU;
+//<<<<<<< Updated upstream
+//int level = L_MENU;
+//=======
+
+int level = L_OVER;
+//>>>>>>> Stashed changes
+
 
 boolean left, right, up;
 boolean isAttack = false;
@@ -62,6 +72,10 @@ boolean isBack = false;
 
 // Timer
 int attackTimer=0;
+
+
+// Platform version
+int pversion;
 
 void setup() {
   size(1080, 700);
@@ -144,9 +158,10 @@ void setup() {
   // initialize player
   player = new Player(200, 300, 50, 50, 0, 0);
   player2 = new Player(50, 350, 50, 50, 0, 0);
-  player3 = new Player(50, 600, 50, 50, 0, 0);
+  player3 = new Player(250, 350, 50, 50, 0, 0);
 
   // initialize platforms
+  pversion = (int)random(1,3);
   platforms = new ArrayList<Platform>();
   //for (int i=-1400; i<600; i=i+150){
   //  float randpx = random(4) * 100;
@@ -158,33 +173,43 @@ void setup() {
   //platforms.add(new Platform(500, 900, 200, 25));
   //platforms.add(new Platform(800, 800, 200, 25));
   //platforms.add(new Platform(500, 700, 200, 25));
-  platforms.add(new Platform(200, 400, 200, 25, 0.25));
-  platforms.add(new Platform(300, 600, 200, 25, 0.25));
-  platforms.add(new Platform(500, 500, 200, 25, 0.25));
-  platforms.add(new Platform(800, 400, 200, 25, 0.25));
-  platforms.add(new Platform(500, 300, 200, 25, 0.25));
-  platforms.add(new Platform(700, 200, 200, 25, 0.25));
-  platforms.add(new Platform(300, 100, 200, 25, 0.25));
-  platforms.add(new Platform(650, 0, 200, 25, 0.25));
-  platforms.add(new Platform(800, -100, 200, 25, 0.25));
-  platforms.add(new Platform(500, -200, 200, 25, 0.25));
-  platforms.add(new Platform(100, -300, 200, 25, 0.25));
-  platforms.add(new Platform(450, -400, 200, 25, 0.25));
-  platforms.add(new Platform(100, -500, 200, 25, 0.25));
-  platforms.add(new Platform(500, -600, 200, 25, 0.25));
-  platforms.add(new Platform(650, -700, 200, 25, 0.25));
-  platforms.add(new Platform(700, -800, 200, 25, 0.25));
-  platforms.add(new Platform(300, -900, 200, 25, 0.25));
-  platforms.add(new Platform(0, -1000, 200, 25, 0.25));
-  platforms.add(new Platform(300, -1100, 200, 25, 0.25));
-  platforms.add(new Platform(500, -1200, 200, 25, 0.25));
+  platforms.add(new Platform(200, 400, 200, 25, 0.25, 1));
+  platforms.add(new Platform(300, 600, 200, 25, 0.25, 3));
+  platforms.add(new Platform(500, 500, 200, 25, 0.25, 1));
+  platforms.add(new Platform(800, 400, 200, 25, 0.25, 2));
+  platforms.add(new Platform(500, 300, 200, 25, 0.25, 3));
+  platforms.add(new Platform(700, 200, 200, 25, 0.25, 1));
+  platforms.add(new Platform(300, 100, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(650, 0, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(800, -100, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(500, -200, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(100, -300, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(450, -400, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(100, -500, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(500, -600, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(650, -700, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(700, -800, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(300, -900, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(0, -1000, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(300, -1100, 200, 25, 0.25, pversion));
+  platforms.add(new Platform(500, -1200, 200, 25, 0.25, pversion));
 
 
   platforms3 = new ArrayList<Platform>();
-  platforms3.add(new Platform(500, 550, 200, 25, 0.3));
-  platforms3.add(new Platform(250, 400, 200, 25, 0.3));
-  platforms3.add(new Platform(750, 400, 200, 25, 0.3));
-  platforms3.add(new Platform(500, 250, 200, 25, 0.3));
+  platforms3.add(new Platform(500, 550, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(250, 400, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(750, 400, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(500, 250, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(650, 100, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(350, -50, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(750, -200, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(500, -350, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(200, -500, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(450, -650, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(750, -800, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(500, -950, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(300, -1100, 200, 25, 0.3, pversion));
+  platforms3.add(new Platform(250, -1250, 200, 25, 0.3, pversion));
 
   //initialize food
   foods = new ArrayList<Food>();
@@ -208,13 +233,17 @@ void setup() {
 
   // initialize enemy
   enemies1 = new ArrayList<Enemy>();
-  enemies1.add(new Enemy(100, 550, 50, 50, 2.5, 0));
-  enemies1.add(new Enemy(800, 350, 50, 50, -3, 0));
-  enemies1.add(new Enemy(100, 150, 50, 50, 5, 0));
+  enemies1.add(new Enemy(100, 550, 50, 50, 1, 0));
+  enemies1.add(new Enemy(800, 350, 50, 50, -1.5, 0));
+  enemies1.add(new Enemy(100, 150, 50, 50, 2, 0));
 
   enemies2 = new ArrayList<Enemy>();
   enemies2.add(new Enemy(100, 100, 50, 50, 0, 0));
   enemies2.add(new Enemy(800, 600, 50, 50, 0, 0));
+  
+  enemies3 = new ArrayList<Enemy>();
+  enemies3.add(new Enemy(600, 225, 50, 50, 0, 0.3));
+  enemies3.add(new Enemy(750, 75, 50, 50, 0, 0.3));
 
 
   // initialize seawead
@@ -228,6 +257,9 @@ void setup() {
 
   // initialize background
   bg = new Background(0, 0, width, height, 0.25);
+  door = new Door(600, -1240, 60, 80, 0.25);
+  door2 = new Door(540, 160, 60, 80, 0);
+  door3 = new Door(350, -1290, 60, 80, 0.3);
 
 
   // initialize boolean variables
@@ -240,20 +272,20 @@ void setup() {
 void draw() {
   levelCheck();
 
-  // Attack timer
+   //Attack timer
   attackTimer ++;
-  if (attackTimer >= 600) {
-    isAttack = true;
-    isBack = false;
-  }
-  if(attackTimer >= 660){
-    isAttack = true;
-  }
-  if (attackTimer >= 720) {
-    isAttack = false;
-    isBack = true;
-    attackTimer = 0;
-  }
+  //if (attackTimer >= 600) {
+  //  isAttack = true;
+  //  isBack = false;
+  //}
+  //if(attackTimer >= 660){
+  //  isAttack = true;
+  //}
+  //if (attackTimer >= 720) {
+  //  isAttack = false;
+  //  isBack = true;
+  //  attackTimer = 0;
+  //}
 
   // ---------------- Menu --------------------
   if (level == L_MENU) {
@@ -277,7 +309,7 @@ void draw() {
   if (level == L_ONE) {
     background(255);
     bg.update();
-    //door.update();
+    door.update();
     setText();
     player.update();
 
@@ -310,15 +342,23 @@ void draw() {
 
       boolean enemyCollision = enemyCollision(player, e);
       if (enemyCollision) {
-        isOver = true;
+        println("YOU DIE!");
+        //isOver = true;
       }
     }
 
     // Display antlion
-    antlion.update();
-    boolean bossCollision = bossCollision(player, antlion);
-      if (bossCollision) {
-        isOver = true;
+    //antlion.update();
+    //boolean bossCollision = bossCollision(player, antlion);
+    //  if (bossCollision) {
+    //    isOver = true;
+    //  }
+    
+    
+    // Check the player touch the door
+    boolean doorCollision = doorCollision(player, door);
+      if (doorCollision) {
+        isTouchDoor = true;
       }
 
 
@@ -335,6 +375,7 @@ void draw() {
   if (level == L_TWO) {
     background(135, 206, 235);
     setText();
+    door2.update();
     player2.update2();
 
     for (int i=0; i<foods2.size(); i++) {
@@ -359,6 +400,12 @@ void draw() {
         isOver =true;
       }
     }
+    
+    // Check the player touch the door
+    boolean doorCollision = doorCollision(player2, door2);
+      if (doorCollision && foodNum>=5) {
+        isTouchDoor = true;
+      }
 
 
     // Display the seaweads
@@ -381,6 +428,7 @@ void draw() {
   if (level == L_THREE) {
     background(255, 204, 203);
     setText();
+    door3.update();
     player3.update();
     player3.display();
 
@@ -396,6 +444,50 @@ void draw() {
 
     // Check the boundaries
     player3.checkBoundaries();
+    
+    
+    
+    // Check the player touch the door
+    boolean doorCollision = doorCollision(player3, door3);
+      if (doorCollision) {
+        isTouchDoor = true;
+      }
+      
+      
+      //Display Antlion
+      
+      antlion.update();
+      println(attackTimer);
+      if(attackTimer >=150 && attackTimer < 200) {
+        antlion.y += -2;
+      }
+      if(attackTimer >=200 && attackTimer <250) {
+        antlion.y += 2;
+      }
+      if (attackTimer >=300) {
+        attackTimer = 0;
+      }
+      
+      boolean bossCollision = bossCollision(player3, antlion);
+      if (bossCollision) {
+        isOver = true;
+      }
+      
+      // Display the enemies
+    for (int i=0; i<enemies3.size(); i++) {
+      Enemy e = enemies3.get(i);
+      e.display();
+      e.update1();
+
+      boolean enemyCollision = enemyCollision(player3, e);
+      if (enemyCollision) {
+        println("YOU DIE!");
+        //isOver = true;
+      }
+    }
+      
+      
+      
   }
 
   // --------------- LEVEL OVER -------------------
@@ -495,7 +587,7 @@ Boolean enemyCollision(Player ep, Enemy ee) {
   float player_y_top = (ee.pos.y-ee.h/2)-(ep.y+ep.h);
   float player_y_bottom = (ep.y) - (ee.pos.y+ee.h/2);
 
-  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top <=0 && player_y_bottom <=0) {
+  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0) {
     return true;
   }
   return false;
@@ -544,7 +636,7 @@ void setText() {
   String s = "FOOD:  " + foodNum;
   String s2 = "LEVEL:  " + level;
   if (level == L_TWO) {
-    String s3 = "Keep jumping and don't fall";
+    String s3 = "Get 5 foods first";
     textSize(18);
     fill(255);
     text(s3, 400, 30);
@@ -560,19 +652,45 @@ void levelCheck() {
     level = L_MENU;
   } else {
     if (!isOver) {
-      level = L_ONE;
+      //level = L_ONE;
 
-      if (foodNum >= 3 && player.y < 0 && level == L_ONE) {
+      if (isTouchDoor==true && level==L_ONE) {
         foodNum = 0;
         level = L_TWO;
+        isTouchDoor = false;
       }
-
-      if (foodNum >= 5 && player2.x+player2.w > width && level == L_TWO) {
+      else if (foodNum >= 5 && level == L_TWO && isTouchDoor==true) {
         foodNum = 0;
         level = L_THREE;
+        isTouchDoor = false;
+      }
+      else if(level==L_TWO && isTouchDoor==false){
+        level = L_TWO;
+      }
+      
+      else if (level==L_THREE && isTouchDoor==true) {
+        println("YOU WIN");
+        isTouchDoor = false;
+      }
+      else if (level==L_THREE && foodNum<5) {
+        level = L_THREE;
+      }
+      
+      else {
+      //level = L_ONE;
+      // --------------------------------------- Change the level here --------------------------------------------
+
+level = L_ONE;
+
+// ----------------------------------------------------------------------------------------------------------
       }
     } else {
       level = L_OVER;
+      
+      
+      // reset all the items in the background
+      //player = new Player(200,-100,50,50,0,0);
+      
     }
   }
 }

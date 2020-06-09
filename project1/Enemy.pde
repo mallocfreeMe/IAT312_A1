@@ -23,6 +23,7 @@ class Enemy{
     if (pos.x-w/2 <= 0 || pos.x+w/2 >= width) {
       vel.x *= -1;    
     }
+    pos.y += vel.y;
   }
   
   void update2(Player p) {

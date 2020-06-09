@@ -28,6 +28,8 @@ class  Antlion {
     //else { 
     //  vy = 0;
     //}
+    y+=vy;
+    x+=vx;
     display();
   }
 }
