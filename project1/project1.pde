@@ -835,6 +835,19 @@ void controlEvent(CallbackEvent event) {
       // If the play button is pressed
     case "/Start":
       isPlaying = true;
+      //
+      player.x = 300;
+      player.y = 500;
+      foodNum = 0;
+      player.vx = 0;
+      player.vy = 0;
+      removeItemsInLevel1();
+      generateLevel1();
+      removeItemsInLevel2();
+      generateLevel2();
+      removeItemsInLevel3();
+      generateLevel3();
+      //
       break;
 
       // If the exit button is pressed
@@ -871,6 +884,7 @@ void controlEvent(CallbackEvent event) {
       
       // ---------------------------- modify play again ------------------------
       level = L_ONE;
+      foodNum = 0;
       isOver = false;
       player.vx = 0;
       player.vy = 0;
