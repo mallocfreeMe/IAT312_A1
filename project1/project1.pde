@@ -650,7 +650,7 @@ void setText() {
   }
   textSize(24);
   fill(0);
-  if (level == L_THREE) {
+  if (level != L_THREE) {
     text(s, 900, 30);
   }
 
