@@ -29,7 +29,7 @@ class Enemy{
   void update2(Player p) {
     angle = atan2(p.y- pos.y, p.x-pos.x); 
     PVector vel = PVector.fromAngle(angle);
-    vel.mult(1);
+    vel.mult(0.8);
     pos.add(vel);
   }
   
