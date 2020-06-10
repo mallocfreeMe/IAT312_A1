@@ -182,80 +182,83 @@ void setup() {
   foods = new ArrayList<Food>();
   // level one 
 
-  platforms.add(new Platform(300, 600, 200, 25, speed, 3));
-  platforms.add(new Platform(550, 500, 200, 25, speed, 1));
-  platforms.add(new Platform(250, 400, 200, 25, speed, 1));
-  foods.add(new Food(300, 400, 25, 25, speed));
+  generateLevel1();
+  //platforms.add(new Platform(300, 600, 200, 25, speed, 3));
+  //platforms.add(new Platform(550, 500, 200, 25, speed, 1));
+  //platforms.add(new Platform(250, 400, 200, 25, speed, 1));
+  //foods.add(new Food(300, 400, 25, 25, speed));
 
-  platforms.add(new Platform(500, 300, 200, 25, speed, 3));
-  foods.add(new Food(550, 300, 25, 25, speed));
+  //platforms.add(new Platform(500, 300, 200, 25, speed, 3));
+  //foods.add(new Food(550, 300, 25, 25, speed));
 
-  platforms.add(new Platform(700, 200, 200, 25, speed, 1));
+  //platforms.add(new Platform(700, 200, 200, 25, speed, 1));
 
-  platforms.add(new Platform(500, 100, 200, 25, speed, 1));
+  //platforms.add(new Platform(500, 100, 200, 25, speed, 1));
 
-  platforms.add(new Platform(800, 50, 200, 25, speed, 1));
-  foods.add(new Food(850, 40, 25, 25, speed));
-  foods.add(new Food(850, 10, 25, 25, speed));
-  foods.add(new Food(850, -20, 25, 25, speed));
+  //platforms.add(new Platform(800, 50, 200, 25, speed, 1));
+  //foods.add(new Food(850, 40, 25, 25, speed));
+  //foods.add(new Food(850, 10, 25, 25, speed));
+  //foods.add(new Food(850, -20, 25, 25, speed));
 
-  speed = 0.6;
+  //speed = 0.6;
 
-  platforms.add(new Platform(300, -100, 200, 25, speed, 1));
+  //platforms.add(new Platform(300, -100, 200, 25, speed, 1));
 
-  platforms.add(new Platform(500, -200, 200, 25, speed, 1));
+  //platforms.add(new Platform(500, -200, 200, 25, speed, 1));
 
-  platforms.add(new Platform(800, -300, 200, 25, speed, 1));
-  door = new Door(850, -340, 60, 80, speed);
+  //platforms.add(new Platform(800, -300, 200, 25, speed, 1));
+  //door = new Door(850, -340, 60, 80, speed);
 
   // level 2
-  player2 = new Player(50, 350, 50, 50, 0, 0);
-  foods2 = new ArrayList<Food>();
-  foods2.add(new Food(100, 200, 25, 25, 0));
-  foods2.add(new Food(500, 500, 25, 25, 0));
-  foods2.add(new Food(200, 200, 25, 25, 0));
-  foods2.add(new Food(1000, 200, 25, 25, 0));
-  foods2.add(new Food(800, 600, 25, 25, 0));
+  generateLevel2();
+  //player2 = new Player(50, 350, 50, 50, 0, 0);
+  //foods2 = new ArrayList<Food>();
+  //foods2.add(new Food(100, 200, 25, 25, 0));
+  //foods2.add(new Food(500, 500, 25, 25, 0));
+  //foods2.add(new Food(200, 200, 25, 25, 0));
+  //foods2.add(new Food(1000, 200, 25, 25, 0));
+  //foods2.add(new Food(800, 600, 25, 25, 0));
 
-  door2 = new Door(540, 260, 60, 80, 0);
-  enemies2 = new ArrayList<Enemy>();
-  enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
-  enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
-  enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
+  //door2 = new Door(540, 260, 60, 80, 0);
+  //enemies2 = new ArrayList<Enemy>();
+  //enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
+  //enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
+  //enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
 
   // level 3
-  player3 = new Player(250, 350, 50, 50, 0, 0);
-  platforms3 = new ArrayList<Platform>();
+  generateLevel3();
+  //player3 = new Player(250, 350, 50, 50, 0, 0);
+  //platforms3 = new ArrayList<Platform>();
 
-  speed = 1.5;
-  platforms3.add(new Platform(250, 400, 200, 25, speed, pversion));
-  platforms3.add(new Platform(750, 400, 200, 25, speed, pversion));
-  platforms3.add(new Platform(500, 250, 200, 25, speed, pversion));
-  platforms3.add(new Platform(650, 100, 200, 25, speed, pversion));
-  platforms3.add(new Platform(350, -50, 200, 25, speed, pversion));
-  platforms3.add(new Platform(750, -200, 200, 25, speed, pversion));
-  platforms3.add(new Platform(500, -350, 200, 25, speed, pversion));
-  platforms3.add(new Platform(200, -500, 200, 25, speed, pversion));
-  platforms3.add(new Platform(450, -650, 200, 25, speed, pversion));
-  platforms3.add(new Platform(750, -800, 200, 25, speed, pversion));
-  platforms3.add(new Platform(500, -950, 200, 25, speed, pversion));
-  platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
-  platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
-  door3 = new Door(300, -1290, 60, 80, speed);
+  //speed = 1.5;
+  //platforms3.add(new Platform(250, 400, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(750, 400, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(500, 250, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(650, 100, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(350, -50, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(750, -200, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(500, -350, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(200, -500, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(450, -650, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(750, -800, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(500, -950, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
+  //platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
+  //door3 = new Door(300, -1290, 60, 80, speed);
 
-  // initiallize antlion
-  antlion = new Antlion(300, 600, 500, 500, 0, 0);
+  //// initiallize antlion
+  //antlion = new Antlion(300, 600, 500, 500, 0, 0);
 
 
-  enemies3 = new ArrayList<Enemy>();
+  //enemies3 = new ArrayList<Enemy>();
 
-  // initialize seawead
-  seaweads = new ArrayList<Seawead>();
-  for (int i = 0; i < 3; i++) {
-    float rx = random(1080);
-    float ry = random(700);
-    seaweads.add(new Seawead(rx, ry, 75, 75));
-  }
+  //// initialize seawead
+  //seaweads = new ArrayList<Seawead>();
+  //for (int i = 0; i < 3; i++) {
+  //  float rx = random(1080);
+  //  float ry = random(700);
+  //  seaweads.add(new Seawead(rx, ry, 75, 75));
+  //}
 
 
   // initialize background
@@ -696,6 +699,131 @@ void levelCheck() {
   }
 }
 
+
+
+// Generate and reset the game
+// Generate all the items in the level 1
+void generateLevel1(){
+  
+  float speed = 0.5;
+
+  platforms.add(new Platform(300, 600, 200, 25, speed, 3));
+  platforms.add(new Platform(550, 500, 200, 25, speed, 1));
+  platforms.add(new Platform(250, 400, 200, 25, speed, 1));
+  foods.add(new Food(300, 400, 25, 25, speed));
+
+  platforms.add(new Platform(500, 300, 200, 25, speed, 3));
+  foods.add(new Food(550, 300, 25, 25, speed));
+
+  platforms.add(new Platform(700, 200, 200, 25, speed, 1));
+
+  platforms.add(new Platform(500, 100, 200, 25, speed, 1));
+
+  platforms.add(new Platform(800, 50, 200, 25, speed, 1));
+  foods.add(new Food(850, 40, 25, 25, speed));
+  foods.add(new Food(850, 10, 25, 25, speed));
+  foods.add(new Food(850, -20, 25, 25, speed));
+
+  speed = 0.6;
+
+  platforms.add(new Platform(300, -100, 200, 25, speed, 1));
+
+  platforms.add(new Platform(500, -200, 200, 25, speed, 1));
+
+  platforms.add(new Platform(800, -300, 200, 25, speed, 1));
+  door = new Door(850, -340, 60, 80, speed);
+  
+}
+
+// Remove all the items in the level one
+void removeItemsInLevel1() {
+  for (int i=platforms.size()-1; i>=0;i--) {
+    platforms.remove(i);
+  }
+  
+  for (int j=foods.size()-1; j>=0; j--) {
+    foods.remove(j);
+  }
+}
+
+
+// Generate all the items in the level 2
+void generateLevel2() {
+  player2 = new Player(50, 350, 50, 50, 0, 0);
+  foods2 = new ArrayList<Food>();
+  foods2.add(new Food(100, 200, 25, 25, 0));
+  foods2.add(new Food(500, 500, 25, 25, 0));
+  foods2.add(new Food(200, 200, 25, 25, 0));
+  foods2.add(new Food(1000, 200, 25, 25, 0));
+  foods2.add(new Food(800, 600, 25, 25, 0));
+
+  door2 = new Door(540, 260, 60, 80, 0);
+  enemies2 = new ArrayList<Enemy>();
+  enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
+  enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
+  enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
+  
+    // initialize seawead
+  seaweads = new ArrayList<Seawead>();
+  for (int i = 0; i < 3; i++) {
+    float rx = random(1080);
+    float ry = random(700);
+    seaweads.add(new Seawead(rx, ry, 75, 75));
+  }
+
+}
+
+// Remove all the items in the level one
+void removeItemsInLevel2(){
+  for(int i=foods2.size()-1; i>=0; i--) {
+    foods2.remove(i);
+  }
+  
+  for(int j=seaweads.size()-1; j>=0;j--) {
+    seaweads.remove(j);
+  }
+}
+
+
+// Generate all the items in the level 3
+void generateLevel3() {
+  player3 = new Player(250, 350, 50, 50, 0, 0);
+  platforms3 = new ArrayList<Platform>();
+
+  float speed = 1.5;
+  platforms3.add(new Platform(250, 400, 200, 25, speed, pversion));
+  platforms3.add(new Platform(750, 400, 200, 25, speed, pversion));
+  platforms3.add(new Platform(500, 250, 200, 25, speed, pversion));
+  platforms3.add(new Platform(650, 100, 200, 25, speed, pversion));
+  platforms3.add(new Platform(350, -50, 200, 25, speed, pversion));
+  platforms3.add(new Platform(750, -200, 200, 25, speed, pversion));
+  platforms3.add(new Platform(500, -350, 200, 25, speed, pversion));
+  platforms3.add(new Platform(200, -500, 200, 25, speed, pversion));
+  platforms3.add(new Platform(450, -650, 200, 25, speed, pversion));
+  platforms3.add(new Platform(750, -800, 200, 25, speed, pversion));
+  platforms3.add(new Platform(500, -950, 200, 25, speed, pversion));
+  platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
+  platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
+  door3 = new Door(300, -1290, 60, 80, speed);
+
+  // initiallize antlion
+  antlion = new Antlion(300, 600, 500, 500, 0, 0);
+
+
+  enemies3 = new ArrayList<Enemy>();
+}
+
+//Remove all the items in the level 3
+void removeItemsInLevel3() {
+  for(int i=platforms3.size()-1; i>=0; i--) {
+    platforms3.remove(i);
+  }
+}
+
+
+// -----------------------------------------------------------------
+
+
 // callback function from ControlP5 library
 // it triggers whenever there is a CallbackEvent is happening
 void controlEvent(CallbackEvent event) {
@@ -736,10 +864,27 @@ void controlEvent(CallbackEvent event) {
     case "/play again":
       backButton.hide();
       playAgainButton.hide();
-      player.x = 200;
-      player.y = 300;
+      player.x = 300;
+      player.y = 500;
       bg.refresh();
       //isOver = false;
+      
+      // ---------------------------- modify play again ------------------------
+      level = L_ONE;
+      isOver = false;
+      player.vx = 0;
+      player.vy = 0;
+      removeItemsInLevel1();
+      generateLevel1();
+      //door = new Door(850, -340, 60, 80, 0.6);
+      removeItemsInLevel2();
+      generateLevel2();
+      removeItemsInLevel3();
+      generateLevel3();
+      
+      // -----------------------------------------------------------------------
+      
+      
       break;
     case "/back":
       isOver = false;
