@@ -29,9 +29,6 @@ PImage overImage;
 PImage lostImage;
 
 // game won widgets
-Button winBackButton;
-Button winExitButton;
-
 PImage winTitleImage;
 PImage winImage;
 
@@ -55,9 +52,6 @@ Door door3;
 int foodNum = 0;
 
 // Level
-boolean isPlaying = false;
-boolean isOver = false;
-boolean isTouchDoor = false;
 
 int L_OVER = -2;
 int L_SELECT = -1;
@@ -65,19 +59,35 @@ int L_MENU = 0;
 int L_ONE = 1;
 int L_TWO = 2;
 int L_THREE = 3;
-int L_WON = 4;
+int L_WIN = 4;
 
 // stories screen
-int L_one= 5;
-int L_two = 6;
-int L_three = 7;
+int L_1_1= 5;
+int L_1_2= 6;
+int L_2_1= 7;
+int L_2_2= 8;
+int L_3_1 = 9;
+int L_3_2 = 10;
 
-//<<<<<<< Updated upstream
+PImage story_1_1;
+PImage story_1_2;
+PImage story_2_1;
+PImage story_2_2;
+PImage story_3_1;
+PImage story_3_2;
+
+Button nextButton;
+
+
+// set level
+boolean isPlaying = true;
+boolean isStory = false;
+boolean isInstruction = false;
+boolean isOver = false;
+boolean isFinished = false;
+boolean isTouchDoor = false;
 int level = L_MENU;
-//=======
 
-//int level = L_OVER;
-//>>>>>>> Stashed changes
 
 
 boolean left, right, up;
@@ -117,6 +127,18 @@ void setup() {
     .setColorBackground(color(255))
     .setColorForeground(color(255, 0, 0))
     .setSize(130, 25)
+    .setFont(cf1);
+
+
+  // set up the next button
+  nextButton = cp5.addButton("Next")
+    .setPosition(500, 580)
+    .setColorActive(color(100)) 
+    .setColorLabel(color(0))
+    .setColorBackground(color(255))
+    .setColorForeground(color(255, 0, 0))
+    .setSize(130, 25)
+    .hide()
     .setFont(cf1);
 
   // set music button
@@ -169,6 +191,19 @@ void setup() {
   lostImage=loadImage("img/lost.png");
   lostImage.resize(320, 300);
 
+  winTitleImage=loadImage("img/win_title.png");
+  winImage=loadImage("img/win.png");
+
+
+  // load stories and instuctions
+  story_1_1 = loadImage("img/1-1.png");
+  story_1_2 = loadImage("img/1-2.png");
+  story_2_1 = loadImage("img/2-1.png");
+  story_2_2 = loadImage("img/2-2.png");
+  story_3_1 = loadImage("img/3-1.png");
+  story_3_2 = loadImage("img/3-2.png");
+
+
   // initialize platforms
   pversion = (int)random(1, 3);
   platforms = new ArrayList<Platform>();
@@ -183,83 +218,12 @@ void setup() {
   // level one 
 
   generateLevel1();
-  //platforms.add(new Platform(300, 600, 200, 25, speed, 3));
-  //platforms.add(new Platform(550, 500, 200, 25, speed, 1));
-  //platforms.add(new Platform(250, 400, 200, 25, speed, 1));
-  //foods.add(new Food(300, 400, 25, 25, speed));
-
-  //platforms.add(new Platform(500, 300, 200, 25, speed, 3));
-  //foods.add(new Food(550, 300, 25, 25, speed));
-
-  //platforms.add(new Platform(700, 200, 200, 25, speed, 1));
-
-  //platforms.add(new Platform(500, 100, 200, 25, speed, 1));
-
-  //platforms.add(new Platform(800, 50, 200, 25, speed, 1));
-  //foods.add(new Food(850, 40, 25, 25, speed));
-  //foods.add(new Food(850, 10, 25, 25, speed));
-  //foods.add(new Food(850, -20, 25, 25, speed));
-
-  //speed = 0.6;
-
-  //platforms.add(new Platform(300, -100, 200, 25, speed, 1));
-
-  //platforms.add(new Platform(500, -200, 200, 25, speed, 1));
-
-  //platforms.add(new Platform(800, -300, 200, 25, speed, 1));
-  //door = new Door(850, -340, 60, 80, speed);
 
   // level 2
   generateLevel2();
-  //player2 = new Player(50, 350, 50, 50, 0, 0);
-  //foods2 = new ArrayList<Food>();
-  //foods2.add(new Food(100, 200, 25, 25, 0));
-  //foods2.add(new Food(500, 500, 25, 25, 0));
-  //foods2.add(new Food(200, 200, 25, 25, 0));
-  //foods2.add(new Food(1000, 200, 25, 25, 0));
-  //foods2.add(new Food(800, 600, 25, 25, 0));
-
-  //door2 = new Door(540, 260, 60, 80, 0);
-  //enemies2 = new ArrayList<Enemy>();
-  //enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
-  //enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
-  //enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
 
   // level 3
   generateLevel3();
-  //player3 = new Player(250, 350, 50, 50, 0, 0);
-  //platforms3 = new ArrayList<Platform>();
-
-  //speed = 1.5;
-  //platforms3.add(new Platform(250, 400, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(750, 400, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(500, 250, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(650, 100, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(350, -50, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(750, -200, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(500, -350, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(200, -500, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(450, -650, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(750, -800, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(500, -950, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
-  //platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
-  //door3 = new Door(300, -1290, 60, 80, speed);
-
-  //// initiallize antlion
-  //antlion = new Antlion(300, 600, 500, 500, 0, 0);
-
-
-  //enemies3 = new ArrayList<Enemy>();
-
-  //// initialize seawead
-  //seaweads = new ArrayList<Seawead>();
-  //for (int i = 0; i < 3; i++) {
-  //  float rx = random(1080);
-  //  float ry = random(700);
-  //  seaweads.add(new Seawead(rx, ry, 75, 75));
-  //}
-
 
   // initialize background
   bg = new Background(0, 0, 1080, height, 0.2);
@@ -278,39 +242,25 @@ void draw() {
 
   //Attack timer
   attackTimer ++;
-  //if (attackTimer >= 600) {
-  //  isAttack = true;
-  //  isBack = false;
-  //}
-  //if(attackTimer >= 660){
-  //  isAttack = true;
-  //}
-  //if (attackTimer >= 720) {
-  //  isAttack = false;
-  //  isBack = true;
-  //  attackTimer = 0;
-  //}
 
-  // ---------------- Menu --------------------
-  if (level == L_MENU) {
+  // level 1_1
+  if (level == L_1_1) {
+    nextButton.show();
     color menuColor = color(#9B8F93);
     background(menuColor);
-    image( titleImage, 360, 20);
-    image(backgroundImage, 380, 200);
+    image(story_1_1, 320, 150);
+  }
 
-    playAgainButton.hide();
-    backButton.hide();
-    startButton.show();
-    exitButton.show();
-    musicButton.show();
-  } else {
-    musicButton.hide();
-    startButton.hide();
-    exitButton.hide();
+  if (level == L_1_2) {
+    nextButton.show();
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    image(story_1_2, 320, 150);
   }
 
   // ---------------- LEVEL 1 --------------------
   if (level == L_ONE) {
+    nextButton.hide();
     //print(player.y);
     bg.display();
     door.update();
@@ -373,6 +323,8 @@ void draw() {
     player.display();
     setText();
   }
+
+
 
   // --------------- LEVEL 2 -------------------
 
@@ -490,6 +442,26 @@ void draw() {
     }
   }
 
+  // ---------------- Menu --------------------
+  if (level == L_MENU) {
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    image( titleImage, 360, 20);
+    image(backgroundImage, 380, 200);
+
+    playAgainButton.hide();
+    backButton.hide();
+    nextButton.hide();
+
+    startButton.show();
+    exitButton.show();
+    musicButton.show();
+  } else {
+    musicButton.hide();
+    startButton.hide();
+    exitButton.hide();
+  }
+
   // --------------- LEVEL OVER -------------------
   if (level == L_OVER) {
     color menuColor = color(#9B8F93);
@@ -499,6 +471,17 @@ void draw() {
 
     image(lostImage, 400, 20);
     image(overImage, 420, 280);
+  }
+
+  // --------------- LEVEL OVER -------------------
+  if (level == L_WIN) {
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    playAgainButton.show();
+    exitButton.show();
+
+    image(winTitleImage, 260, 20);
+    image(winImage, 300, 280);
   }
 }
 
@@ -657,54 +640,10 @@ void setText() {
   text(s2, 30, 30);
 }
 
-void levelCheck() {
-  if (!isPlaying) {
-    level = L_MENU;
-  } else {
-    if (!isOver) {
-      //level = L_ONE;
-      //level = L_TWO;
-      //level = L_THREE;
-
-      if (isTouchDoor==true && level==L_ONE) {
-        foodNum = 0;
-        level = L_TWO;
-        isTouchDoor = false;
-      } else if (level == L_TWO && isTouchDoor==true) {
-        foodNum = 0;
-        level = L_THREE;
-        isTouchDoor = false;
-      } else if (level==L_TWO && isTouchDoor==false) {
-        level = L_TWO;
-      } else if (level==L_THREE && isTouchDoor==true) {
-        isPlaying = false;
-        isTouchDoor = false;
-      } else if (level==L_THREE && foodNum<5) {
-        level = L_THREE;
-      } else {
-        //level = L_ONE;
-        // --------------------------------------- Change the level here --------------------------------------------
-
-        level = L_ONE;
-
-        // ----------------------------------------------------------------------------------------------------------
-      }
-    } else {
-      level = L_OVER;
-
-
-      // reset all the items in the background
-      //player = new Player(200,-100,50,50,0,0);
-    }
-  }
-}
-
-
-
 // Generate and reset the game
 // Generate all the items in the level 1
-void generateLevel1(){
-  
+void generateLevel1() {
+
   float speed = 0.5;
 
   platforms.add(new Platform(300, 600, 200, 25, speed, 3));
@@ -732,15 +671,14 @@ void generateLevel1(){
 
   platforms.add(new Platform(800, -300, 200, 25, speed, 1));
   door = new Door(850, -340, 60, 80, speed);
-  
 }
 
 // Remove all the items in the level one
 void removeItemsInLevel1() {
-  for (int i=platforms.size()-1; i>=0;i--) {
+  for (int i=platforms.size()-1; i>=0; i--) {
     platforms.remove(i);
   }
-  
+
   for (int j=foods.size()-1; j>=0; j--) {
     foods.remove(j);
   }
@@ -762,24 +700,23 @@ void generateLevel2() {
   enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
   enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
   enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
-  
-    // initialize seawead
+
+  // initialize seawead
   seaweads = new ArrayList<Seawead>();
   for (int i = 0; i < 3; i++) {
     float rx = random(1080);
     float ry = random(700);
     seaweads.add(new Seawead(rx, ry, 75, 75));
   }
-
 }
 
 // Remove all the items in the level one
-void removeItemsInLevel2(){
-  for(int i=foods2.size()-1; i>=0; i--) {
+void removeItemsInLevel2() {
+  for (int i=foods2.size()-1; i>=0; i--) {
     foods2.remove(i);
   }
-  
-  for(int j=seaweads.size()-1; j>=0;j--) {
+
+  for (int j=seaweads.size()-1; j>=0; j--) {
     seaweads.remove(j);
   }
 }
@@ -815,13 +752,49 @@ void generateLevel3() {
 
 //Remove all the items in the level 3
 void removeItemsInLevel3() {
-  for(int i=platforms3.size()-1; i>=0; i--) {
+  for (int i=platforms3.size()-1; i>=0; i--) {
     platforms3.remove(i);
   }
 }
 
 
-// -----------------------------------------------------------------
+void levelCheck() {
+  //print(level);
+  if (!isPlaying && !isFinished && isStory && isInstruction) {
+    level = L_MENU;
+  } else {
+    if (!isOver) {
+      if (!isTouchDoor && isStory && level == L_MENU) {
+        level = L_1_1;
+      }
+      if (!isTouchDoor && isInstruction && level == L_1_1) {
+        level = L_1_2;
+      }
+
+      if (!isTouchDoor && level == L_1_2 && isInstruction) {
+        level = L_ONE;
+      } else if (isTouchDoor==true && level==L_ONE) {
+        foodNum = 0;
+        isTouchDoor = false;
+        level = L_TWO;
+      } else if (level == L_TWO && isTouchDoor==true) {
+        foodNum = 0;
+        isTouchDoor = false;
+        level = L_THREE;
+      } else if (level==L_TWO && isTouchDoor==false) {
+        level = L_TWO;
+      } else if (level==L_THREE && isTouchDoor==false) {
+        level = L_THREE;
+      } else if (level==L_THREE && isTouchDoor==true) {
+        level = L_WIN;
+        isPlaying = false;
+        isTouchDoor = false;
+        isFinished = true;
+      } else if (level == L_WIN && isFinished) {
+      }
+    }
+  }
+}
 
 
 // callback function from ControlP5 library
@@ -835,6 +808,7 @@ void controlEvent(CallbackEvent event) {
       // If the play button is pressed
     case "/Start":
       isPlaying = true;
+      isStory = true;
       break;
 
       // If the exit button is pressed
@@ -861,30 +835,36 @@ void controlEvent(CallbackEvent event) {
         song.pause();
       }
       break;
+    case "/Next":
+      if (isStory) {
+        isStory = false;
+        isInstruction = true;
+      } else {
+        isInstruction = false;
+      }
+      break;
     case "/play again":
-      backButton.hide();
-      playAgainButton.hide();
-      player.x = 300;
-      player.y = 500;
-      bg.refresh();
-      //isOver = false;
-      
-      // ---------------------------- modify play again ------------------------
-      level = L_ONE;
-      isOver = false;
-      player.vx = 0;
-      player.vy = 0;
-      removeItemsInLevel1();
-      generateLevel1();
-      //door = new Door(850, -340, 60, 80, 0.6);
-      removeItemsInLevel2();
-      generateLevel2();
-      removeItemsInLevel3();
-      generateLevel3();
-      
-      // -----------------------------------------------------------------------
-      
-      
+      if (level != L_WIN) {
+        backButton.hide();
+        playAgainButton.hide();
+        player.x = 300;
+        player.y = 500;
+        bg.refresh();
+        level = L_ONE;
+        isOver = false;
+        player.vx = 0;
+        player.vy = 0;
+        removeItemsInLevel1();
+        generateLevel1();
+        //door = new Door(850, -340, 60, 80, 0.6);
+        removeItemsInLevel2();
+        generateLevel2();
+        removeItemsInLevel3();
+        generateLevel3();
+      } else {
+        level = L_MENU;
+        isFinished = false;
+      }
       break;
     case "/back":
       isOver = false;
