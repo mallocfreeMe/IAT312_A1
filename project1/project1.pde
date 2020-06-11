@@ -40,13 +40,14 @@ ControlP5 cp5;
 
 Player player, player2, player3;
 ArrayList<Platform> platforms, platforms3;
+Platform channel2;
 ArrayList<Food> foods, foods2, foods3;
 Antlion antlion;
-//ArrayList<Enemy> enemies1;
+ArrayList<Enemy> enemies1;
 ArrayList<Enemy> enemies2;
 ArrayList<Enemy> enemies3;
 ArrayList<Seawead> seaweads;
-Background bg;
+Background bg,bg2,bg3;
 Door door;
 Door door2;
 Door door3;
@@ -264,6 +265,10 @@ void setup() {
   // initialize background
   bg = new Background(0, 0, 1080, height, 0.2);
   bg.display();
+  
+  bg2 = new Background(0, 0, 1080, height, 0.2);
+  //bg2.display2();
+  bg3 = new Background(0, 0, 1080, height, 0.2);
 
 
   // initialize boolean variables
@@ -337,18 +342,18 @@ void draw() {
       }
     }
 
-    // Display the enemies
-    //for (int i=0; i<enemies1.size(); i++) {
-    //  Enemy e = enemies1.get(i);
-    //  e.display();
-    //  e.update1();
+     //Display the enemies
+    for (int i=0; i<enemies1.size(); i++) {
+      Enemy e = enemies1.get(i);
+      e.display();
+      e.update1();
 
-    //  boolean enemyCollision = enemyCollision(player, e);
-    //  if (enemyCollision) {
-    //    println("YOU DIE!");
-    //    isOver = true;
-    //  }
-    //}
+      boolean enemyCollision = enemyCollision(player, e);
+      if (enemyCollision) {
+        println("YOU DIE!");
+        isOver = true;
+      }
+    }
 
     // Display antlion
     //antlion.update();
@@ -377,10 +382,15 @@ void draw() {
   // --------------- LEVEL 2 -------------------
 
   if (level == L_TWO) {
-    background(135, 206, 235);
-    setText();
+    //background(135, 206, 235);
+    bg2.display2();
     door2.update();
+    channel2.update();
     player2.update3();
+    rectangleCollisions(player2, channel2);
+    player2.checkPlatforms();
+    // Check the boundaries
+    player2.checkBoundaries();
 
     for (int i=0; i<foods2.size(); i++) {
       Food f = foods2.get(i);
@@ -424,13 +434,16 @@ void draw() {
         player2.vy *= speedLimit;
       }
     }
+    
+    setText();
   }
 
 
   // --------------- LEVEL 3 -------------------
   if (level == L_THREE) {
-    background(255, 204, 203);
-    setText();
+    //background(255, 204, 203);
+    bg3.display3();
+    
     door3.update();
     player3.update();
     player3.display();
@@ -488,6 +501,20 @@ void draw() {
         isOver = true;
       }
     }
+    
+    for (int i=0; i<foods3.size(); i++) {
+      Food f = foods3.get(i);
+      f.update();
+
+      boolean foodCollision = collectCollision(player3, f);
+      if (foodCollision) {
+        foodNum++;
+        foods3.remove(i);
+      }
+    }
+    
+    setText();
+    
   }
 
   // --------------- LEVEL OVER -------------------
@@ -733,6 +760,11 @@ void generateLevel1(){
   platforms.add(new Platform(800, -300, 200, 25, speed, 1));
   door = new Door(850, -340, 60, 80, speed);
   
+  enemies1 = new ArrayList<Enemy>();
+  enemies1.add(new Enemy(100, 100, 40, 40, -2, 0));
+  enemies1.add(new Enemy(200, 400, 40, 40, 2, 0));
+  enemies1.add(new Enemy(300, 250, 40, 40, -3, 0));
+  
 }
 
 // Remove all the items in the level one
@@ -744,12 +776,17 @@ void removeItemsInLevel1() {
   for (int j=foods.size()-1; j>=0; j--) {
     foods.remove(j);
   }
+  
+  for (int k=enemies1.size()-1; k>=0; k--) {
+    enemies1.remove(k);
+  }
 }
 
 
 // Generate all the items in the level 2
 void generateLevel2() {
-  player2 = new Player(50, 350, 50, 50, 0, 0);
+  channel2 = new Platform(0,400,100,50, 0, 4);
+  player2 = new Player(10, 350, 50, 50, 0, 0);
   foods2 = new ArrayList<Food>();
   foods2.add(new Food(100, 200, 25, 25, 0));
   foods2.add(new Food(500, 500, 25, 25, 0));
@@ -770,6 +807,7 @@ void generateLevel2() {
     float ry = random(700);
     seaweads.add(new Seawead(rx, ry, 75, 75));
   }
+  
 
 }
 
@@ -805,6 +843,11 @@ void generateLevel3() {
   platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
   platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
   door3 = new Door(300, -1290, 60, 80, speed);
+  foods3 = new ArrayList<Food>();
+  foods3.add(new Food(600, 250, 25, 25, speed));
+  foods3.add(new Food(450, -50, 25, 25, speed));
+  foods3.add(new Food(450, -75, 25, 25, speed));
+  foods3.add(new Food(300, -500, 25, 25, speed));
 
   // initiallize antlion
   antlion = new Antlion(300, 600, 500, 500, 0, 0);
@@ -817,6 +860,10 @@ void generateLevel3() {
 void removeItemsInLevel3() {
   for(int i=platforms3.size()-1; i>=0; i--) {
     platforms3.remove(i);
+  }
+  
+  for(int j=foods3.size()-1; j>=0; j--) {
+    foods3.remove(j);
   }
 }
 

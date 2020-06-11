@@ -4,7 +4,7 @@ class Background{
   
   float o_x, o_y;
   
-  PImage img1;
+  PImage img1, img2, img3;
 
   Background(float x, float y, float w, float h, float vy){
     this.w = w;
@@ -16,6 +16,8 @@ class Background{
     o_y = y;
     
     img1 = loadImage("img/dirt.png");
+    img2 = loadImage("img/water.png");
+    img3 = loadImage("img/volcano.png");
   }
 
   void display(){
@@ -30,6 +32,22 @@ class Background{
     //fill(128,255, 255);
     //rect(0,-2*h,w,h);
     //image(img1,0,-2*h,w,h);
+    popMatrix();
+  }
+  
+  void display2(){
+    pushMatrix();
+    translate(x, y);
+    //fill(128, 255, 0);
+    image(img2,0,0,w,h);
+    popMatrix();
+  }
+  
+  void display3(){
+    pushMatrix();
+    translate(x, y);
+    //fill(128, 255, 0);
+    image(img3,0,0,w,h);
     popMatrix();
   }
   
