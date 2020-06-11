@@ -37,13 +37,14 @@ ControlP5 cp5;
 
 Player player, player2, player3;
 ArrayList<Platform> platforms, platforms3;
+Platform channel2;
 ArrayList<Food> foods, foods2, foods3;
 Antlion antlion;
 //ArrayList<Enemy> enemies1;
 ArrayList<Enemy> enemies2;
 ArrayList<Enemy> enemies3;
 ArrayList<Seawead> seaweads;
-Background bg;
+Background bg,bg2,bg3;
 Door door;
 Door door2;
 Door door3;
@@ -83,6 +84,7 @@ Button nextButton;
 boolean isPlaying = true;
 boolean isStory = false;
 boolean isInstruction = false;
+boolean isInstruction2 = false;
 boolean isOver = false;
 boolean isFinished = false;
 boolean isTouchDoor = false;
@@ -228,6 +230,8 @@ void setup() {
   // initialize background
   bg = new Background(0, 0, 1080, height, 0.2);
   bg.display();
+  bg2 = new Background(0, 0, 1080, height, 0.2);
+  bg3 = new Background(0, 0, 1080, height, 0.2);
 
 
   // initialize boolean variables
@@ -329,10 +333,17 @@ void draw() {
   // --------------- LEVEL 2 -------------------
 
   if (level == L_TWO) {
-    background(135, 206, 235);
+    //background(135, 206, 235);
+    bg2.display2();
     setText();
     door2.update();
+    channel2.update();
     player2.update3();
+    rectangleCollisions(player2, channel2);
+    player2.checkPlatforms();
+    
+    // Check the boundaries
+    player2.checkBoundaries();
 
     for (int i=0; i<foods2.size(); i++) {
       Food f = foods2.get(i);
@@ -381,7 +392,8 @@ void draw() {
 
   // --------------- LEVEL 3 -------------------
   if (level == L_THREE) {
-    background(255, 204, 203);
+    //background(255, 204, 203);
+    bg3.display3();
     setText();
     door3.update();
     player3.update();
@@ -687,6 +699,7 @@ void removeItemsInLevel1() {
 
 // Generate all the items in the level 2
 void generateLevel2() {
+  channel2 = new Platform(0,400,100,50, 0, 4);
   player2 = new Player(50, 350, 50, 50, 0, 0);
   foods2 = new ArrayList<Food>();
   foods2.add(new Food(100, 200, 25, 25, 0));
@@ -727,7 +740,7 @@ void generateLevel3() {
   player3 = new Player(250, 350, 50, 50, 0, 0);
   platforms3 = new ArrayList<Platform>();
 
-  float speed = 1.5;
+  float speed = 1.2;
   platforms3.add(new Platform(250, 400, 200, 25, speed, pversion));
   platforms3.add(new Platform(750, 400, 200, 25, speed, pversion));
   platforms3.add(new Platform(500, 250, 200, 25, speed, pversion));
@@ -771,7 +784,7 @@ void levelCheck() {
         level = L_1_2;
       }
 
-      if (!isTouchDoor && level == L_1_2 && isInstruction) {
+      if (!isTouchDoor && level == L_1_2 && !isInstruction && isInstruction2) {
         level = L_ONE;
       } else if (isTouchDoor==true && level==L_ONE) {
         foodNum = 0;
@@ -792,6 +805,8 @@ void levelCheck() {
         isFinished = true;
       } else if (level == L_WIN && isFinished) {
       }
+    }else {
+      level = L_OVER;
     }
   }
 }
@@ -835,12 +850,25 @@ void controlEvent(CallbackEvent event) {
         song.pause();
       }
       break;
+    //case "/Next":
+    //  if (isStory) {
+    //    isStory = false;
+    //    isInstruction = true;
+    //  } else {
+    //    isInstruction = false;
+    //  }
+    //  break;
     case "/Next":
-      if (isStory) {
+      if (isStory && !isInstruction && !isInstruction2) {
         isStory = false;
         isInstruction = true;
-      } else {
+      }
+      else if(!isStory && isInstruction && !isInstruction2){
         isInstruction = false;
+        isInstruction2 = true;
+      }
+      else if (isInstruction2) {
+        isInstruction2 = false;
       }
       break;
     case "/play again":
@@ -851,6 +879,7 @@ void controlEvent(CallbackEvent event) {
         player.y = 500;
         bg.refresh();
         level = L_ONE;
+        foodNum = 0;
         isOver = false;
         player.vx = 0;
         player.vy = 0;
