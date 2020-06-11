@@ -3,7 +3,7 @@ class Platform{
   float halfWidth, halfHeight;
   int version;
   
-  PImage img1, img2, img3;
+  PImage img1, img2, img3, img4;;
 
   Platform(float x, float y, float w, float h, float vy, int version){
     this.w = w;
@@ -19,6 +19,7 @@ class Platform{
     img1 = loadImage("img/rock1.png");
     img2 = loadImage("img/rock2.png");
     img3 = loadImage("img/rock3.png");
+    img4 = loadImage("img/level2_channel.png");
   }
 
   void display(){
@@ -35,6 +36,9 @@ class Platform{
         break;
       case 3:
         image(img3,x,y,w,h);
+        break;
+      case 4:
+        image(img4,x,y,w,h);
         break;
     }
     //image(img1,x,y,w,h);
