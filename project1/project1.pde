@@ -682,7 +682,7 @@ void generateLevel1() {
   platforms.add(new Platform(500, -200, 200, 25, speed, 1));
 
   platforms.add(new Platform(800, -300, 200, 25, speed, 1));
-  door = new Door(850, -340, 60, 80, speed);
+  door = new Door(850, -310, 60, 80, speed);
 }
 
 // Remove all the items in the level one
@@ -754,7 +754,7 @@ void generateLevel3() {
   platforms3.add(new Platform(500, -950, 200, 25, speed, pversion));
   platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
   platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
-  door3 = new Door(300, -1290, 60, 80, speed);
+  door3 = new Door(300, -1250, 60, 80, speed);
 
   // initiallize antlion
   antlion = new Antlion(300, 600, 500, 500, 0, 0);
