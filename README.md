@@ -2,15 +2,15 @@
 
 <h2>Milestone 3</h2>
 
-1.Incorporating the health bar<br>
+1. Incorporating the health bar<br>
 
-2.When pressing play again button the game goes back to level where you died<br>
+2. When pressing play again button the game goes back to level where you died<br>
 
-3.Make enemies appear at random<br>
+3. Make enemies appear at random<br>
 
-4.FOR ANT LION: Ant Lion attacks player at random<br>
+4. FOR ANT LION: Ant Lion attacks player at random<br>
 
-5.Rearrange level design<br>
+5. Rearrange level design<br>
 
 
 <ul>
