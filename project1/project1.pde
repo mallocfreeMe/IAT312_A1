@@ -65,26 +65,34 @@ int L_WIN = 4;
 // stories screen
 int L_1_1= 5;
 int L_1_2= 6;
-int L_2_1= 7;
-int L_2_2= 8;
+int L_1_3= 7;
+int L_2_1= 8;
 int L_3_1 = 9;
-int L_3_2 = 10;
 
 PImage story_1_1;
 PImage story_1_2;
+PImage story_1_3;
 PImage story_2_1;
-PImage story_2_2;
 PImage story_3_1;
-PImage story_3_2;
 
 Button nextButton;
 
 
 // set level
 boolean isPlaying = true;
+// first story
 boolean isStory = false;
+// second story
 boolean isInstruction = false;
+// first inst
+boolean isInstruction3 = false;
+// first level
 boolean isInstruction2 = false;
+// second level ins
+boolean isInstruction4 = false;
+// second level
+boolean isInstruction5 = false;
+
 boolean isOver = false;
 boolean isFinished = false;
 boolean isTouchDoor = false;
@@ -200,10 +208,9 @@ void setup() {
   // load stories and instuctions
   story_1_1 = loadImage("img/1-1.png");
   story_1_2 = loadImage("img/1-2.png");
+  story_1_3 = loadImage("img/1-3.png");
   story_2_1 = loadImage("img/2-1.png");
-  story_2_2 = loadImage("img/2-2.png");
   story_3_1 = loadImage("img/3-1.png");
-  story_3_2 = loadImage("img/3-2.png");
 
 
   // initialize platforms
@@ -261,9 +268,15 @@ void draw() {
     image(story_1_2, 320, 150);
   }
 
+  if (level == L_1_3) {
+    nextButton.show();
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    image(story_1_3, 200, 50, width/1.5, height/1.5);
+  }
+
   // ---------------- LEVEL 1 --------------------
   if (level == L_ONE) {
-    print(player2.health);
     nextButton.hide();
     bg2.display2();
     setText();
@@ -325,6 +338,14 @@ void draw() {
     }
   }
 
+  // --------------- LEVEL 2.1 -------------------
+  if (level == L_2_1) {
+    nextButton.show();
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    image(story_2_1, 200, 50, width/1.5, height/1.5);
+  }
+
   // --------------- LEVEL 2 -------------------
 
   if (level == L_TWO) {
@@ -368,10 +389,17 @@ void draw() {
     setText();
   }
 
+  // --------------- LEVEL 3.1 -------------------
+  if (level == L_3_1) {
+    nextButton.show();
+    color menuColor = color(#9B8F93);
+    background(menuColor);
+    image(story_3_1, 200, 50, width/1.5, height/1.5);
+  }
 
   // --------------- LEVEL 3 -------------------
   if (level == L_THREE) {
-    //background(255, 204, 203);
+    nextButton.hide();
     bg3.display3();
     setText();
     door3.update();
@@ -747,8 +775,7 @@ void removeItemsInLevel3() {
 
 
 void levelCheck() {
-  //print(level);
-  if (!isPlaying && !isFinished && isStory && isInstruction) {
+  if (!isPlaying && !isFinished) {
     level = L_MENU;
   } else {
     if (!isOver) {
@@ -758,16 +785,23 @@ void levelCheck() {
       if (!isTouchDoor && isInstruction && level == L_1_1) {
         level = L_1_2;
       }
+      if (!isTouchDoor && isInstruction3 && level == L_1_2) {
+        level = L_1_3;
+      }
 
-      if (!isTouchDoor && level == L_1_2 && !isInstruction && isInstruction2) {
+      if (!isTouchDoor && level == L_1_3 && !isInstruction && !isInstruction3 && isInstruction2) {
         level = L_ONE;
       } else if (isTouchDoor==true && level==L_ONE) {
         foodNum = 0;
         isTouchDoor = false;
+        level = L_2_1;
+      } else if (level == L_2_1 && isInstruction4) {
         level = L_TWO;
       } else if (level == L_TWO && isTouchDoor==true) {
         foodNum = 0;
         isTouchDoor = false;
+        level = L_3_1;
+      } else if (level == L_3_1 && isInstruction5) {
         level = L_THREE;
       } else if (level==L_TWO && isTouchDoor==false) {
         level = L_TWO;
@@ -808,10 +842,6 @@ void controlEvent(CallbackEvent event) {
       break;
 
       // if the music button is pressed
-      // it will play the music
-      // if the music button is pressed again
-      // stop the music
-      // the button will loop the conditions I describe above 
     case "/sound":
       if (playBackgroundMusic) {
         playBackgroundMusic=false;
@@ -825,15 +855,21 @@ void controlEvent(CallbackEvent event) {
         song.pause();
       }
       break;
+      // if the next button is pressed
     case "/Next":
-      if (isStory && !isInstruction && !isInstruction2) {
+      if (isStory && !isInstruction && !isInstruction2 && !isInstruction3) {
         isStory = false;
         isInstruction = true;
-      } else if (!isStory && isInstruction && !isInstruction2) {
+      } else if (!isStory && isInstruction && !isInstruction2 && !isInstruction3) {
         isInstruction = false;
+        isInstruction3 = true;
+      } else if (!isStory && !isInstruction && !isInstruction2 && isInstruction3) {
+        isInstruction3 = false;
         isInstruction2 = true;
       } else if (isInstruction2) {
         isInstruction2 = false;
+      } else if (!isInstruction4) {
+        isInstruction4 = true;
       }
       break;
     case "/play again":
