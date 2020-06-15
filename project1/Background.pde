@@ -17,7 +17,7 @@ class Background{
     
     img1 = loadImage("img/dirt.png");
     img2 = loadImage("img/water.png");
-    img3 = loadImage("img/volcano.png");
+    img3 = loadImage("img/icy_bg.png");
   }
 
   void display(){

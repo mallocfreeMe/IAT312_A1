@@ -10,8 +10,13 @@ class Player {
   String collisionSide;
   boolean facingRight;
   int frameSequence;
-
   PImage img;
+  int health;
+  boolean invisible;
+  int startTime;
+  int timeOut;
+  int count;
+
 
   Player(float x, float y, float w, float h, float vx, float vy) {
     this.x = x;
@@ -30,6 +35,8 @@ class Player {
     isOnGround = false;
     isOnScreenBottom = false;
     jumpForce = -10;
+    health = 3;
+    invisible = false;
 
     halfWidth = w/2;
     halfHeight = h/2;
@@ -135,6 +142,7 @@ class Player {
       // vy *= bounce;
       // y = 0;
     }
+    // fall into the groud, character will just die
     if (y + h > height) {
       y = height - h;
       isOver = true;
@@ -145,14 +153,9 @@ class Player {
 
 
   void display() {
-    //stroke(0);
-    //fill(255);
-    //rect(x ,y, w, h);
     image(img, x, y, w, h);
 
-
     if (abs(vx)>1 && isOnGround) {
-      //println("currentFrame: "+currentFrame);
       currentFrame = (currentFrame+1)%frameSequence;
     } else {
       currentFrame = 0;
@@ -166,9 +169,6 @@ class Player {
   // ------------- For the LEVEL 2
 
   void display2() {
-    //fill(255);
-    //noStroke();
-    //rect(x, y, w, h);
     image(img, x, y, w, h);
   }
 
@@ -191,8 +191,8 @@ class Player {
       }
     }
   }
-  
-    void jump2() {
+
+  void jump2() {
     if (keyPressed) {
       if (keyCode == UP) {
         vy = -5;
@@ -211,9 +211,9 @@ class Player {
     fall();
     jump();
   }
-  
+
   void update3() {
-        display2();
+    display2();
     fall();
     jump2();
   }

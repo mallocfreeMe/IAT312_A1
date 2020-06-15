@@ -44,7 +44,7 @@ Antlion antlion;
 ArrayList<Enemy> enemies2;
 ArrayList<Enemy> enemies3;
 ArrayList<Seawead> seaweads;
-Background bg,bg2,bg3;
+Background bg, bg2, bg3;
 Door door;
 Door door2;
 Door door3;
@@ -213,7 +213,6 @@ void setup() {
 
   // initialize player
   player = new Player(300, 500, 50, 50, 0, 0);
-  float speed = 0.5;
 
   //initialize food
   foods = new ArrayList<Food>();
@@ -264,8 +263,72 @@ void draw() {
 
   // ---------------- LEVEL 1 --------------------
   if (level == L_ONE) {
+    print(player2.health);
     nextButton.hide();
-    //print(player.y);
+    bg2.display2();
+    setText();
+    door2.update();
+    channel2.update();
+    player2.update3();
+    rectangleCollisions(player2, channel2);
+    player2.checkPlatforms();
+
+    // Check the boundaries
+    player2.checkBoundaries();
+
+    for (int i=0; i<foods2.size(); i++) {
+      Food f = foods2.get(i);
+      f.update();
+
+      boolean foodCollision = collectCollision(player2, f);
+      if (foodCollision) {
+        foodNum++;
+        foods2.remove(i);
+      }
+    }
+
+    // Display the enemies
+    for (int i=0; i<enemies2.size(); i++) {
+      Enemy e = enemies2.get(i);
+      e.display();
+      e.update2(player2);
+
+      boolean enemyCollision = enemyCollision(player2, e);
+      if (enemyCollision) {
+        player2.health--;
+      }
+    }
+
+    // check game is over or not
+    if (player2.health == 0) {
+      isOver =true;
+    }
+
+    // Check the player touch the door
+    boolean doorCollision = doorCollision(player2, door2);
+    if (doorCollision) {
+      isTouchDoor = true;
+    }
+
+
+    // Display the seaweads
+    for (int i=0; i<seaweads.size(); i++) {
+      Seawead s = seaweads.get(i);
+      s.display();
+
+      boolean seaweadCollision = seaweadCollision(player2, s);
+      if (seaweadCollision) {
+        float speedLimit = 0.8;
+        player2.vx *= speedLimit;
+        player2.vy *= speedLimit;
+      }
+    }
+  }
+
+  // --------------- LEVEL 2 -------------------
+
+  if (level == L_TWO) {
+    nextButton.hide();
     bg.display();
     door.update();
     player.update();
@@ -291,34 +354,11 @@ void draw() {
       }
     }
 
-    // Display the enemies
-    //for (int i=0; i<enemies1.size(); i++) {
-    //  Enemy e = enemies1.get(i);
-    //  e.display();
-    //  e.update1();
-
-    //  boolean enemyCollision = enemyCollision(player, e);
-    //  if (enemyCollision) {
-    //    println("YOU DIE!");
-    //    isOver = true;
-    //  }
-    //}
-
-    // Display antlion
-    //antlion.update();
-    //boolean bossCollision = bossCollision(player, antlion);
-    //  if (bossCollision) {
-    //    isOver = true;
-    //  }
-
-
     // Check the player touch the door
     boolean doorCollision = doorCollision(player, door);
     if (doorCollision) {
       isTouchDoor = true;
     }
-
-
 
     // Check the boundaries
     player.checkBoundaries();
@@ -326,67 +366,6 @@ void draw() {
     // Display
     player.display();
     setText();
-  }
-
-
-
-  // --------------- LEVEL 2 -------------------
-
-  if (level == L_TWO) {
-    //background(135, 206, 235);
-    bg2.display2();
-    setText();
-    door2.update();
-    channel2.update();
-    player2.update3();
-    rectangleCollisions(player2, channel2);
-    player2.checkPlatforms();
-    
-    // Check the boundaries
-    player2.checkBoundaries();
-
-    for (int i=0; i<foods2.size(); i++) {
-      Food f = foods2.get(i);
-      f.update();
-
-      boolean foodCollision = collectCollision(player2, f);
-      if (foodCollision) {
-        foodNum++;
-        foods2.remove(i);
-      }
-    }
-
-    // Display the enemies
-    for (int i=0; i<enemies2.size(); i++) {
-      Enemy e = enemies2.get(i);
-      e.display();
-      e.update2(player2);
-
-      boolean enemyCollision = enemyCollision(player2, e);
-      if (enemyCollision) {
-        isOver =true;
-      }
-    }
-
-    // Check the player touch the door
-    boolean doorCollision = doorCollision(player2, door2);
-    if (doorCollision) {
-      isTouchDoor = true;
-    }
-
-
-    // Display the seaweads
-    for (int i=0; i<seaweads.size(); i++) {
-      Seawead s = seaweads.get(i);
-      s.display();
-
-      boolean seaweadCollision = seaweadCollision(player2, s);
-      if (seaweadCollision) {
-        float speedLimit = 0.8;
-        player2.vx *= speedLimit;
-        player2.vy *= speedLimit;
-      }
-    }
   }
 
 
@@ -437,7 +416,7 @@ void draw() {
 
     boolean bossCollision = bossCollision(player3, antlion);
     if (bossCollision) {
-      isOver = true;
+      player3.health--;
     }
 
     // Display the enemies
@@ -448,9 +427,12 @@ void draw() {
 
       boolean enemyCollision = enemyCollision(player3, e);
       if (enemyCollision) {
-        println("YOU DIE!");
         isOver = true;
       }
+    }
+
+    if ( player3.health == 0) {
+      isOver = true;
     }
   }
 
@@ -637,12 +619,6 @@ void setText() {
   }
   String s = "FOOD: " + foodNum + " " + "/" + " " + num;
   String s2 = "LEVEL:  " + level;
-  if (level == L_TWO) {
-    String s3 = "Keep pressing up key to stay alive";
-    textSize(18);
-    fill(255);
-    text(s3, 430, 30);
-  }
   textSize(24);
   fill(0);
   if (level != L_THREE) {
@@ -655,7 +631,33 @@ void setText() {
 // Generate and reset the game
 // Generate all the items in the level 1
 void generateLevel1() {
+  channel2 = new Platform(0, 400, 100, 50, 0, 4);
+  player2 = new Player(50, 350, 50, 50, 0, 0);
+  foods2 = new ArrayList<Food>();
+  foods2.add(new Food(100, 200, 25, 25, 0));
+  foods2.add(new Food(500, 500, 25, 25, 0));
+  foods2.add(new Food(200, 200, 25, 25, 0));
+  foods2.add(new Food(1000, 200, 25, 25, 0));
+  foods2.add(new Food(800, 600, 25, 25, 0));
 
+  door2 = new Door(540, 260, 60, 80, 0);
+  enemies2 = new ArrayList<Enemy>();
+  enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
+  enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
+  enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
+
+  // initialize seawead
+  seaweads = new ArrayList<Seawead>();
+  for (int i = 0; i < 3; i++) {
+    float rx = random(1080);
+    float ry = random(700);
+    seaweads.add(new Seawead(rx, ry, 75, 75));
+  }
+}
+
+
+// Generate all the items in the level 2
+void generateLevel2() {
   float speed = 0.5;
 
   platforms.add(new Platform(300, 600, 200, 25, speed, 3));
@@ -693,33 +695,6 @@ void removeItemsInLevel1() {
 
   for (int j=foods.size()-1; j>=0; j--) {
     foods.remove(j);
-  }
-}
-
-
-// Generate all the items in the level 2
-void generateLevel2() {
-  channel2 = new Platform(0,400,100,50, 0, 4);
-  player2 = new Player(50, 350, 50, 50, 0, 0);
-  foods2 = new ArrayList<Food>();
-  foods2.add(new Food(100, 200, 25, 25, 0));
-  foods2.add(new Food(500, 500, 25, 25, 0));
-  foods2.add(new Food(200, 200, 25, 25, 0));
-  foods2.add(new Food(1000, 200, 25, 25, 0));
-  foods2.add(new Food(800, 600, 25, 25, 0));
-
-  door2 = new Door(540, 260, 60, 80, 0);
-  enemies2 = new ArrayList<Enemy>();
-  enemies2.add(new Enemy(100, 100, 20, 20, 0, 0));
-  enemies2.add(new Enemy(200, 600, 20, 20, 0, 0));
-  enemies2.add(new Enemy(300, 100, 20, 20, 0, 0));
-
-  // initialize seawead
-  seaweads = new ArrayList<Seawead>();
-  for (int i = 0; i < 3; i++) {
-    float rx = random(1080);
-    float ry = random(700);
-    seaweads.add(new Seawead(rx, ry, 75, 75));
   }
 }
 
@@ -805,7 +780,7 @@ void levelCheck() {
         isFinished = true;
       } else if (level == L_WIN && isFinished) {
       }
-    }else {
+    } else {
       level = L_OVER;
     }
   }
@@ -850,24 +825,14 @@ void controlEvent(CallbackEvent event) {
         song.pause();
       }
       break;
-    //case "/Next":
-    //  if (isStory) {
-    //    isStory = false;
-    //    isInstruction = true;
-    //  } else {
-    //    isInstruction = false;
-    //  }
-    //  break;
     case "/Next":
       if (isStory && !isInstruction && !isInstruction2) {
         isStory = false;
         isInstruction = true;
-      }
-      else if(!isStory && isInstruction && !isInstruction2){
+      } else if (!isStory && isInstruction && !isInstruction2) {
         isInstruction = false;
         isInstruction2 = true;
-      }
-      else if (isInstruction2) {
+      } else if (isInstruction2) {
         isInstruction2 = false;
       }
       break;
@@ -885,7 +850,6 @@ void controlEvent(CallbackEvent event) {
         player.vy = 0;
         removeItemsInLevel1();
         generateLevel1();
-        //door = new Door(850, -340, 60, 80, 0.6);
         removeItemsInLevel2();
         generateLevel2();
         removeItemsInLevel3();
