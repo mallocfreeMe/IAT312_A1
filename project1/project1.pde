@@ -96,8 +96,16 @@ boolean isInstruction5 = false;
 boolean isOver = false;
 boolean isFinished = false;
 boolean isTouchDoor = false;
+<<<<<<< HEAD
 boolean isDoorOpen = false;
 int level = L_MENU;
+=======
+
+// Check bottom touch enemies
+boolean isBottomTouch = false;
+
+int level = L_TWO;
+>>>>>>> 50d12d5ed2c1736f0a4b1343c99c791784946935
 int resetLevel;
 
 
@@ -408,6 +416,11 @@ void draw() {
         player.health--;
         println("Hit by enemy and Lose Health in Level 2");
       }
+      if (isBottomTouch) {
+        println("hit");
+        enemies1.remove(i);
+        isBottomTouch = false;
+      }
     }
 
 
@@ -630,7 +643,10 @@ Boolean enemyCollision(Player ep, Enemy ee) {
   float player_y_top = (ee.pos.y-ee.h/2)-(ep.y+ep.h);
   float player_y_bottom = (ep.y) - (ee.pos.y+ee.h/2);
 
-  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0) {
+  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0 && ep.vy>2) {
+    isBottomTouch = true;
+  }
+  else if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0) {
     return true;
   }
   return false;
