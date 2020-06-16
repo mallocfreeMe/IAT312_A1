@@ -2,24 +2,34 @@ class Enemy{
   float w,h;
   PVector pos, vel;
   float angle = 0;
+  int ver;
   
   PImage img1, img2, img3;
 
-  Enemy(float x, float y, float w, float h, float vx, float vy){
+  Enemy(float x, float y, float w, float h, float vx, float vy, int ver){
     this.w = w;
     this.h = h;
     pos = new PVector(x, y);
     vel = new PVector(vx, vy);
+    this.ver = ver;
     
     img1 = loadImage("img/swimingEnemyRight.png");
+    img2 = loadImage("img/enemy2.png");
   }
 
   void display(){
     pushMatrix();
     translate(pos.x-w/2, pos.y-h/2);
-    //fill(255, 255, 0);
-    //rect(0,0,w,h);
-    image(img1, 0, 0, w, h);
+    
+    switch(ver) {
+      case 1: 
+        image(img1, 0, 0, w, h);
+        break;
+      case 2: 
+        image(img2, 0, 0, w, h);
+        break;
+    }
+    
     popMatrix();
   }
   
