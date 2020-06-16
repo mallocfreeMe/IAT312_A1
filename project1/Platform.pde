@@ -1,11 +1,9 @@
-//<<<<<<< Updated upstream
 class Platform {
   float w, h, x, y, vx, vy;
   float halfWidth, halfHeight;
   int version;
 
   PImage img1, img2, img3, img4, img5, img6, img7, img8;
-//=======
 
   Platform(float x, float y, float w, float h, float vx, float vy, int version){
 //>>>>>>> Stashed changes
@@ -24,11 +22,9 @@ class Platform {
     img2 = loadImage("img/rock2.png");
     img3 = loadImage("img/rock3.png");
     img4 = loadImage("img/level2_channel.png");
-//<<<<<<< Updated upstream
     img5 = loadImage("img/ice platform 1.png");
     img6 = loadImage("img/ice platform 2.png");
     img7 = loadImage("img/ice platform 3.png");
-//=======
     img8 = loadImage("img/turtle.png");
   }
 

@@ -97,6 +97,7 @@ boolean isOver = false;
 boolean isFinished = false;
 boolean isTouchDoor = false;
 int level = L_MENU;
+int resetLevel;
 
 
 
@@ -110,6 +111,9 @@ int attackTimer=0;
 
 // Platform version
 int pversion, pversion2, pversion3, pversion4;
+
+//Drop
+Drop[] drops = new Drop[100];
 
 void setup() {
   size(1080, 700);
@@ -249,6 +253,12 @@ void setup() {
   left = false;
   right = false;
   up = false;
+  
+  
+  // initialize the drops
+  for (int i=0; i<drops.length; i++) {
+    drops[i] = new Drop();
+  }
 }
 
 
@@ -493,6 +503,13 @@ void draw() {
     if ( player3.health == 0) {
       isOver = true;
     }
+    
+    // Show the drops in the level 3
+    for (int i=0; i<drops.length; i++) {
+      drops[i].display();
+      drops[i].fall();
+    }
+    
   }
 
   // ---------------- Menu --------------------
@@ -690,7 +707,7 @@ void setText() {
 // Generate and reset the game
 // Generate all the items in the level 1
 void generateLevel1() {
-  channel2 = new Platform(0, 400, 100, 50, 0,0.5, 4);
+  channel2 = new Platform(0, 400, 100, 50, 0,0, 4);
   player2 = new Player(50, 350, 50, 50, 0, 0);
   foods2 = new ArrayList<Food>();
   //foods2.add(new Food(100, 200, 25, 25, 0));
@@ -818,21 +835,20 @@ void generateLevel3() {
 
   float speed = 1.2;
   
-  platforms3.add(new Platform(250, 400, 200, 25,0, speed, pversion));
-  platforms3.add(new Platform(750, 400, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(500, 250, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(650, 100, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(350, -50, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(750, -200, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(500, -350, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(200, -500, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(450, -650, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(750, -800, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(500, -950, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(300, -1100, 200, 25, 0,speed, pversion));
-  platforms3.add(new Platform(250, -1250, 200, 25, 0,speed, pversion));
+  platforms3.add(new Platform(250, 400, 200, 25,0, speed, 5));
+  platforms3.add(new Platform(750, 400, 200, 25, 0,speed, 6));
+  platforms3.add(new Platform(500, 250, 200, 25, 0,speed, 7));
+  platforms3.add(new Platform(650, 100, 200, 25, 0,speed, 5));
+  platforms3.add(new Platform(350, -50, 200, 25, 0,speed, 6));
+  platforms3.add(new Platform(750, -200, 200, 25, 0,speed, 7));
+  platforms3.add(new Platform(500, -350, 200, 25, 0,speed, 5));
+  platforms3.add(new Platform(200, -500, 200, 25, 0,speed, 6));
+  platforms3.add(new Platform(450, -650, 200, 25, 0,speed, 7));
+  platforms3.add(new Platform(750, -800, 200, 25, 0,speed, 5));
+  platforms3.add(new Platform(500, -950, 200, 25, 0,speed, 7));
+  platforms3.add(new Platform(300, -1100, 200, 25, 0,speed, 6));
+  platforms3.add(new Platform(250, -1250, 200, 25, 0,speed, 5));
   door3 = new Door(300, -1270, 60, 80, speed,1);
-//>>>>>>> Stashed changes
 
   // initiallize antlion
   antlion = new Antlion(300, 600, 500, 500, 0, 0);
@@ -866,18 +882,21 @@ void levelCheck() {
 
       if (!isTouchDoor && level == L_1_3 && !isInstruction && !isInstruction3 && isInstruction2) {
         level = L_ONE;
+        resetLevel = L_ONE;
       } else if (isTouchDoor==true && level==L_ONE) {
         foodNum = 0;
         isTouchDoor = false;
         level = L_2_1;
       } else if (level == L_2_1 && isInstruction4) {
         level = L_TWO;
+        resetLevel = L_TWO;
       } else if (level == L_TWO && isTouchDoor==true) {
         foodNum = 0;
         isTouchDoor = false;
         level = L_3_1;
       } else if (level == L_3_1 && isInstruction5) {
         level = L_THREE;
+        resetLevel = L_THREE;
       } else if (level==L_TWO && isTouchDoor==false) {
         level = L_TWO;
       } else if (level==L_THREE && isTouchDoor==false) {
@@ -954,7 +973,7 @@ void controlEvent(CallbackEvent event) {
         player.x = 300;
         player.y = 500;
         bg.refresh();
-        level = L_ONE;
+        level = resetLevel;
         foodNum = 0;
         isOver = false;
         player.vx = 0;
