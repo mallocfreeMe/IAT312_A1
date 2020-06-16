@@ -34,12 +34,12 @@ class Food{
   
   void update() {
     x += vx;
-    y += vy;
+    //y += vy;
     display();
     
-    if(x<=0 || x+w>=width) {
-      vx *= -1;
-    }
+    //if(x<=0 || x+w>=width) {
+    //  vx *= -1;
+    //}
     
   }
 }
