@@ -14,25 +14,9 @@ class  Antlion {
     img = loadImage("img/antlion.png");
   }
   void display() {
-    //fill(0);
-    //rect(x, y, w, h);
     image(img,x,y,w,h);
   }
   void update() { 
-    //y += vy;
-    //if(isAttack == true) {
-    //  if (isBack == false) {
-    //    println("Attack Time");
-    //    vy = -5;
-    //  }
-    //  else {
-    //    vy = 5;
-    //  }
-      
-    //}
-    //else { 
-    //  vy = 0;
-    //}
     y+=vy;
     x+=vx;
     display();

@@ -96,7 +96,7 @@ boolean isInstruction5 = false;
 boolean isOver = false;
 boolean isFinished = false;
 boolean isTouchDoor = false;
-int level = L_MENU;
+int level = L_THREE;
 
 
 
@@ -109,7 +109,7 @@ int attackTimer=0;
 
 
 // Platform version
-int pversion;
+int pversion, pversion2, pversion3, pversion4;
 
 void setup() {
   size(1080, 700);
@@ -213,8 +213,12 @@ void setup() {
   story_3_1 = loadImage("img/3-1.png");
 
 
-  // initialize platforms
+  // random initialize platforms for level 2
   pversion = (int)random(1, 3);
+  pversion2 = (int)random(1, 3);
+  pversion3 = (int)random(5, 7);
+  pversion4 = (int)random(5, 7);
+  
   platforms = new ArrayList<Platform>();
 
 
@@ -432,13 +436,13 @@ void draw() {
 
     antlion.update();
     //println(attackTimer);
-    if (attackTimer >=150 && attackTimer < 200) {
-      antlion.y += -2;
+    if (attackTimer >=100 && attackTimer < 150) {
+      antlion.y += -3;
     }
-    if (attackTimer >=200 && attackTimer <250) {
-      antlion.y += 2;
+    if (attackTimer >=150 && attackTimer <200) {
+      antlion.y += 3;
     }
-    if (attackTimer >=300) {
+    if (attackTimer >=200) {
       attackTimer = 0;
     }
 
@@ -688,30 +692,30 @@ void generateLevel1() {
 void generateLevel2() {
   float speed = 0.5;
 
-  platforms.add(new Platform(300, 600, 200, 25, speed, 3));
-  platforms.add(new Platform(550, 500, 200, 25, speed, 1));
-  platforms.add(new Platform(250, 400, 200, 25, speed, 1));
+  platforms.add(new Platform(300, 600, 200, 25, speed, pversion));
+  platforms.add(new Platform(550, 500, 200, 25, speed, pversion));
+  platforms.add(new Platform(250, 400, 200, 25, speed, pversion));
   foods.add(new Food(300, 400, 25, 25, speed));
 
-  platforms.add(new Platform(500, 300, 200, 25, speed, 3));
+  platforms.add(new Platform(500, 300, 200, 25, speed, pversion2));
   foods.add(new Food(550, 300, 25, 25, speed));
 
-  platforms.add(new Platform(700, 200, 200, 25, speed, 1));
+  platforms.add(new Platform(700, 200, 200, 25, speed, pversion2));
 
-  platforms.add(new Platform(500, 100, 200, 25, speed, 1));
+  platforms.add(new Platform(500, 100, 200, 25, speed, pversion2));
 
-  platforms.add(new Platform(800, 50, 200, 25, speed, 1));
+  platforms.add(new Platform(800, 50, 200, 25, speed, pversion));
   foods.add(new Food(850, 40, 25, 25, speed));
   foods.add(new Food(850, 10, 25, 25, speed));
   foods.add(new Food(850, -20, 25, 25, speed));
 
   speed = 0.6;
 
-  platforms.add(new Platform(300, -100, 200, 25, speed, 1));
+  platforms.add(new Platform(300, -100, 200, 25, speed, pversion));
 
-  platforms.add(new Platform(500, -200, 200, 25, speed, 1));
+  platforms.add(new Platform(500, -200, 200, 25, speed, pversion));
 
-  platforms.add(new Platform(800, -300, 200, 25, speed, 1));
+  platforms.add(new Platform(800, -300, 200, 25, speed, pversion2));
   door = new Door(850, -310, 60, 80, speed);
 }
 
@@ -741,22 +745,23 @@ void removeItemsInLevel2() {
 // Generate all the items in the level 3
 void generateLevel3() {
   player3 = new Player(250, 350, 50, 50, 0, 0);
+  player3.vy = 5;
   platforms3 = new ArrayList<Platform>();
 
   float speed = 1.2;
-  platforms3.add(new Platform(250, 400, 200, 25, speed, pversion));
-  platforms3.add(new Platform(750, 400, 200, 25, speed, pversion));
-  platforms3.add(new Platform(500, 250, 200, 25, speed, pversion));
-  platforms3.add(new Platform(650, 100, 200, 25, speed, pversion));
-  platforms3.add(new Platform(350, -50, 200, 25, speed, pversion));
-  platforms3.add(new Platform(750, -200, 200, 25, speed, pversion));
-  platforms3.add(new Platform(500, -350, 200, 25, speed, pversion));
-  platforms3.add(new Platform(200, -500, 200, 25, speed, pversion));
-  platforms3.add(new Platform(450, -650, 200, 25, speed, pversion));
-  platforms3.add(new Platform(750, -800, 200, 25, speed, pversion));
-  platforms3.add(new Platform(500, -950, 200, 25, speed, pversion));
-  platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion));
-  platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion));
+  platforms3.add(new Platform(250, 400, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(750, 400, 200, 25, speed, pversion4));
+  platforms3.add(new Platform(500, 250, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(650, 100, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(350, -50, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(750, -200, 200, 25, speed, pversion4));
+  platforms3.add(new Platform(500, -350, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(200, -500, 200, 25, speed, pversion4));
+  platforms3.add(new Platform(450, -650, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(750, -800, 200, 25, speed, pversion4));
+  platforms3.add(new Platform(500, -950, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(300, -1100, 200, 25, speed, pversion3));
+  platforms3.add(new Platform(250, -1250, 200, 25, speed, pversion4));
   door3 = new Door(300, -1250, 60, 80, speed);
 
   // initiallize antlion
@@ -866,10 +871,10 @@ void controlEvent(CallbackEvent event) {
       } else if (!isStory && !isInstruction && !isInstruction2 && isInstruction3) {
         isInstruction3 = false;
         isInstruction2 = true;
-      } else if (isInstruction2) {
-        isInstruction2 = false;
       } else if (!isInstruction4) {
         isInstruction4 = true;
+      } else if (!isInstruction5) {
+        isInstruction5 = true;
       }
       break;
     case "/play again":
@@ -898,6 +903,12 @@ void controlEvent(CallbackEvent event) {
     case "/back":
       isOver = false;
       isPlaying = false;
+      isStory = false;
+      isInstruction = false;
+      isInstruction3 = false;
+      isInstruction2 = false;
+      isInstruction4 = false;
+      isInstruction5 = false;
       break;
     }
   }
