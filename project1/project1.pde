@@ -51,6 +51,7 @@ Background bg, bg2, bg3;
 Door door;
 Door door2;
 Door door3;
+ArrayList<Heart> hearts, hearts2, hearts3;
 
 // Score
 int foodNum = 0;
@@ -104,7 +105,7 @@ boolean isDoorOpen = false;
 // Check bottom touch enemies
 boolean isBottomTouch = false;
 
-int level = L_MENU;
+int level = L_THREE;
 int resetLevel;
 
 
@@ -115,6 +116,10 @@ boolean isBack = false;
 
 // Timer
 int attackTimer=0;
+int daddyTime = 0;
+
+// Health
+int health = 3;
 
 
 // Platform version
@@ -277,6 +282,11 @@ void draw() {
 
   //Attack timer
   attackTimer ++;
+  
+  // Daddy Time
+  daddyTime ++;
+  //println(daddyTime);
+  //println("isInstruction="+isInstruction+ " " + "isInstruction2="+isInstruction2+ " " + "isInstruction3="+isInstruction3+ " ");
 
   // level 1_1
   if (level == L_1_1) {
@@ -360,6 +370,15 @@ void draw() {
       rectangleCollisions(player2, p);
       player2.checkPlatforms();
     }
+    
+    
+    // Display the health
+    for(int i=0; i<health; i++) {
+      Heart h = hearts.get(i);
+      h.display();
+    }
+    
+    
   }
 
   // --------------- LEVEL 2.1 -------------------
@@ -429,13 +448,21 @@ void draw() {
       e.update1();
 
       boolean enemyCollision = enemyCollision(player, e);
-      if (enemyCollision) {
-        isOver = true;
+      if (enemyCollision && daddyTime>120) {
+        //isOver = true;
+        health--;
+        daddyTime = 0;
       }
       if (isBottomTouch) {
         enemies1.remove(i);
         isBottomTouch = false;
       }
+    }
+    
+    // Display the health
+    for(int i=0; i<health; i++) {
+      Heart h = hearts2.get(i);
+      h.display();
     }
 
 
@@ -461,6 +488,12 @@ void draw() {
     bg3.display3();
     setText();
     door3.update();
+    
+    // Display the drops
+    for (int i=0; i< drops.length; i++) {
+      drops[i].fall();
+      drops[i].display();
+    }
 
 
     // Display the foods
@@ -533,7 +566,24 @@ void draw() {
     if ( player3.health == 0) {
       isOver = true;
     }
+    
+    
+        // Display the health
+    for(int i=0; i<health; i++) {
+      Heart h = hearts3.get(i);
+      h.display();
+    }
+    
+    
   }
+  
+  
+  // --------------- isOver Function ---------------
+  if (health <= 0) {
+    isOver = true;
+  }
+  
+  
 
   // ---------------- Menu --------------------
   if (level == L_MENU) {
@@ -765,6 +815,12 @@ void generateLevel1() {
   foods2.add(new Food(380, 420, 25, 25, -3, 0, 1));
   foods2.add(new Food(880, 420, 25, 25, -3, 0, 1));
   foods2.add(new Food(620, 270, 25, 25, -3, 0, 1));
+  
+  hearts = new ArrayList<Heart>();
+  hearts.add(new Heart(30, 650, 50, 50));
+  hearts.add(new Heart(105, 650, 50, 50));
+  hearts.add(new Heart(180, 650, 50, 50));
+  
 }
 
 // Remove all the items in the level one
@@ -811,6 +867,12 @@ void generateLevel2() {
 
   platforms.add(new Platform(800, -300, 200, 25, 0, speed, 1));
   door = new Door(850, -330, 60, 80, speed, 1);
+  
+  
+  hearts2 = new ArrayList<Heart>();
+  hearts2.add(new Heart(30, 650, 50, 50));
+  hearts2.add(new Heart(105, 650, 50, 50));
+  hearts2.add(new Heart(180, 650, 50, 50));
 }
 
 // Remove all the items in the level two
@@ -826,6 +888,10 @@ void removeItemsInLevel2() {
   for (int j=enemies1.size()-1; j>=0; j--) {
     enemies1.remove(j);
   }
+  
+  for (int j=hearts2.size()-1; j>=0; j--) {
+    hearts2.remove(j);
+  }
 }
 
 
@@ -838,19 +904,19 @@ void generateLevel3() {
 
   float speed = 1.2;
 
-  foods3.add(new Food(350, 400, 25, 25, 0, speed, 3));
+  foods3.add(new Food(350, 400, 25, 30, 0, speed, 3));
 
-  foods3.add(new Food(700, 100, 25, 25, 0, speed, 3));
+  foods3.add(new Food(700, 100, 25, 30, 0, speed, 3));
 
-  foods3.add(new Food(450, -50, 25, 25, 0, speed, 3));
+  foods3.add(new Food(450, -50, 25, 30, 0, speed, 3));
 
-  foods3.add(new Food(850, -200, 25, 25, 0, speed, 3));
+  foods3.add(new Food(850, -200, 25, 30, 0, speed, 3));
 
-  foods3.add(new Food(550, -350, 25, 25, 0, speed, 3));
+  foods3.add(new Food(550, -350, 25, 30, 0, speed, 3));
 
-  foods3.add(new Food(300, -500, 25, 25, 0, speed, 3));
+  foods3.add(new Food(300, -500, 25, 30, 0, speed, 3));
 
-  foods3.add(new Food(550, -650, 25, 25, 0, speed, 3));
+  foods3.add(new Food(550, -650, 25, 30, 0, speed, 3));
 
   platforms3.add(new Platform(250, 400, 200, 25, 0, speed, 5));
   platforms3.add(new Platform(500, 250, 200, 25, -1, speed, 7));
@@ -868,6 +934,11 @@ void generateLevel3() {
 
   // initiallize antlion
   antlion = new Antlion(300, 600, 500, 500, 0, 0);
+  
+  hearts3 = new ArrayList<Heart>();
+  hearts3.add(new Heart(30, 650, 50, 50));
+  hearts3.add(new Heart(105, 650, 50, 50));
+  hearts3.add(new Heart(180, 650, 50, 50));
 }
 
 //Remove all the items in the level 3
@@ -982,6 +1053,7 @@ void controlEvent(CallbackEvent event) {
         isInstruction3 = false;
         isInstruction2 = true;
       } else if (!isInstruction4) {
+        isInstruction2 = false;
         isInstruction4 = true;
       } else if (!isInstruction5) {
         isInstruction5 = true;
@@ -995,6 +1067,7 @@ void controlEvent(CallbackEvent event) {
         player.y = 500;
         bg.refresh();
         level = resetLevel;
+        health = 3;
         foodNum = 0;
         isOver = false;
         player.vx = 0;
@@ -1008,12 +1081,26 @@ void controlEvent(CallbackEvent event) {
       } else {
         level = L_MENU;
         isFinished = false;
+        health = 3;
+        foodNum = 0;
       }
       break;
     case "/back":
       isOver = false;
       isPlaying = false;
       isStory = false;
+      health = 3;
+      foodNum = 0;
+      player2.x = 30;
+      player2.y = 50;
+      player2.vx = 0;
+      player2.vy = 0;
+      removeItemsInLevel1();
+        generateLevel1();
+        removeItemsInLevel2();
+        generateLevel2();
+        removeItemsInLevel3();
+        generateLevel3();
       isInstruction = false;
       isInstruction3 = false;
       isInstruction2 = false;
