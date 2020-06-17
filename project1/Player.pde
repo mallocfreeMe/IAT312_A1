@@ -12,12 +12,14 @@ class Player {
   int frameSequence;
   PImage img;
   PImage img2;
+  PImage img3;
   int health;
   boolean invisible;
   int startTime;
   int timeOut;
   int count;
   boolean goLeft, goRight;
+  boolean leftOrRight; // true is left; false is right
 
   Player(float x, float y, float w, float h, float vx, float vy) {
     this.x = x;
@@ -48,6 +50,7 @@ class Player {
 
     img = loadImage("img/playerRight.png");
     img2 = loadImage("img/playerLeft.png");
+    img3 = loadImage("img/over.png");
   }
 
   void checkPlatforms() {
@@ -93,15 +96,54 @@ class Player {
 
   void display() {
     if (!goLeft && goRight) {
-      image(img, x, y, w, h);
+      leftOrRight = false;
+      if(daddyTime<=120) {
+        if (daddyTime % 2 == 1) {
+          image(img, x, y, w, h);
+        }
+        else {
+          image(img3, x, y, w, h);
+        }
+      } 
+      else {
+        image(img, x, y, w, h);
+      }
     }
 
     if (goLeft && !goRight) {
-      image(img2, x, y, w, h);
+      leftOrRight = true;
+      if(daddyTime <= 120) {
+        if (daddyTime % 2 == 1) {
+          image(img2, x, y, w, h);
+        }
+        else {
+          image(img3, x, y, w, h);
+        }
+      }else {
+        image(img2, x, y, w, h);
+      }
     }
 
     if (!goLeft && !goRight) {
-      image(img, x, y, w, h);
+      if(daddyTime<=120){
+      if (daddyTime % 2 == 1) {
+        if(leftOrRight == true) {
+          image(img2, x, y, w, h);
+        } else {
+          image(img, x, y, w, h);
+        }
+      }
+        else {
+          image(img3, x, y, w, h);
+        }
+      } else {
+        if(leftOrRight == true) {
+          image(img2, x, y, w, h);
+        } else {
+          image(img, x, y, w, h);
+        }
+        //image(img, x, y, w, h);
+      }
     }
 
     if (abs(vx)>1 && isOnGround) {
