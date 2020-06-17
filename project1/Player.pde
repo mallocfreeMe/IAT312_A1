@@ -13,6 +13,7 @@ class Player {
   PImage img;
   PImage img2;
   PImage img3;
+  PImage img4;
   int health;
   boolean invisible;
   int startTime;
@@ -50,7 +51,8 @@ class Player {
 
     img = loadImage("img/playerRight.png");
     img2 = loadImage("img/playerLeft.png");
-    img3 = loadImage("img/over.png");
+    img3 = loadImage("img/playerOpacityRight.png");
+    img4 = loadImage("img/playerOpacityLeft.png");
   }
 
   void checkPlatforms() {
@@ -112,12 +114,12 @@ class Player {
 
     if (goLeft && !goRight) {
       leftOrRight = true;
-      if(daddyTime <= 120) {
+      if(daddyTime <= 100) {
         if (daddyTime % 2 == 1) {
           image(img2, x, y, w, h);
         }
         else {
-          image(img3, x, y, w, h);
+          image(img4, x, y, w, h);
         }
       }else {
         image(img2, x, y, w, h);
@@ -125,7 +127,7 @@ class Player {
     }
 
     if (!goLeft && !goRight) {
-      if(daddyTime<=120){
+      if(daddyTime<=100){
       if (daddyTime % 2 == 1) {
         if(leftOrRight == true) {
           image(img2, x, y, w, h);
@@ -134,7 +136,12 @@ class Player {
         }
       }
         else {
+          if(leftOrRight == true) {
+          image(img4, x, y, w, h);
+        } else {
           image(img3, x, y, w, h);
+        }
+          //image(img3, x, y, w, h);
         }
       } else {
         if(leftOrRight == true) {
