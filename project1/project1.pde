@@ -105,7 +105,7 @@ boolean isDoorOpen = false;
 // Check bottom touch enemies
 boolean isBottomTouch = false;
 
-int level = L_THREE;
+int level = L_MENU;
 int resetLevel;
 
 
@@ -127,6 +127,10 @@ int pversion, pversion2, pversion3, pversion4;
 
 //Drop
 Drop[] drops = new Drop[100];
+
+// Random the move of the Antlion
+int antlionMove;
+boolean isLeftAttack;
 
 void setup() {
   size(1080, 700);
@@ -287,6 +291,16 @@ void draw() {
   daddyTime ++;
   //println(daddyTime);
   //println("isInstruction="+isInstruction+ " " + "isInstruction2="+isInstruction2+ " " + "isInstruction3="+isInstruction3+ " ");
+  
+  // Random key for antlion move
+  antlionMove = (int)random(1,3);
+  if (attackTimer == 100 && antlionMove == 1) {
+    isLeftAttack = true;
+  }
+  if (attackTimer == 100 && antlionMove == 2) {
+    isLeftAttack = false;
+  }
+  println(isLeftAttack);
 
   // level 1_1
   if (level == L_1_1) {
@@ -554,9 +568,35 @@ void draw() {
     if (attackTimer >=150 && attackTimer <200) {
       antlion.y += 3;
     }
-    if (attackTimer >=200) {
+    if (attackTimer >=200 && attackTimer <250) {
+      // Stay
+    }
+    if (attackTimer >=200 && attackTimer <250) {
+      if (isLeftAttack) {
+        antlion.x -= 5;
+      }
+      if (!isLeftAttack) {
+        antlion.x += 5;
+      }
+    }
+    if (attackTimer >=250 && attackTimer <300) {
+      antlion.y -= 4;
+    }
+    if (attackTimer >=300 && attackTimer <350) {
+      antlion.y += 4;
+    }
+    if (attackTimer >=350 && attackTimer <400) {
+      if (isLeftAttack) {
+        antlion.x += 5;
+      }
+      if (!isLeftAttack) {
+        antlion.x -= 5;
+      }
+    }
+    if (attackTimer >= 400) {
       attackTimer = 0;
     }
+    
 
     boolean bossCollision = bossCollision(player3, antlion);
     if (bossCollision) {
@@ -811,10 +851,12 @@ void generateLevel1() {
   platforms2.add(new Platform(250, 400, 200, 75, -3, 0, 8));
   platforms2.add(new Platform(750, 400, 200, 75, -3, 0, 8));
   platforms2.add(new Platform(500, 250, 200, 75, -3, 0, 8));
+  platforms2.add(new Platform(1000, 200, 200, 75, -3, 0, 8));
+  platforms2.add(new Platform(1300, 400, 200, 75, -3, 0, 8));
 
   foods2.add(new Food(380, 420, 25, 25, -3, 0, 1));
-  foods2.add(new Food(880, 420, 25, 25, -3, 0, 1));
-  foods2.add(new Food(620, 270, 25, 25, -3, 0, 1));
+  foods2.add(new Food(1430, 420, 25, 25, -3, 0, 1));
+  foods2.add(new Food(1130, 220, 25, 25, -3, 0, 1));
   
   hearts = new ArrayList<Heart>();
   hearts.add(new Heart(30, 650, 50, 50));

@@ -267,9 +267,9 @@ class Player {
       vy = speedLimit;
     }
 
-    if (h + y <= h) {
-      isOver = true;
-    }
+    //if (h + y <= h) {
+    //  isOver = true;
+    //}
 
     ////move the player
     x+=vx;
