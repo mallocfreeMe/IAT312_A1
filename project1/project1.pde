@@ -844,7 +844,7 @@ void setText() {
 void generateLevel1() {
   channel2 = new Platform(-30, 100, 100, 50, 0, 0, 4);
   player2 = new Player(30, 50, 50, 50, 0, 0);
-  door2 = new Door(950, 550, 60, 80, 0, 1);
+  door2 = new Door(1000, 120, 80, 100, 0, 1);
   foods2 = new ArrayList<Food>();
 
   platforms2 = new ArrayList<Platform>();
