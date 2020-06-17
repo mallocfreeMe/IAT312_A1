@@ -13,9 +13,13 @@ import controlP5.*;
 Button startButton;
 Button exitButton;
 
+// sounds were retrieved from https://themushroomkingdom.net/media/smw/wav 
+// click sound was retrieved from http://www.orangefreesounds.com/button-click-sound-effect/
 Button musicButton;
 Minim minim;
 AudioPlayer song;
+AudioPlayer foodSound;
+AudioPlayer clickSound;
 boolean playBackgroundMusic =false;
 
 PImage titleImage;
@@ -43,7 +47,6 @@ Antlion antlion;
 ArrayList<Enemy> enemies1;
 ArrayList<Enemy> enemies2;
 ArrayList<Enemy> enemies3;
-//ArrayList<Seawead> seaweads;
 Background bg, bg2, bg3;
 Door door;
 Door door2;
@@ -96,16 +99,12 @@ boolean isInstruction5 = false;
 boolean isOver = false;
 boolean isFinished = false;
 boolean isTouchDoor = false;
-<<<<<<< HEAD
 boolean isDoorOpen = false;
-int level = L_MENU;
-=======
 
 // Check bottom touch enemies
 boolean isBottomTouch = false;
 
-int level = L_TWO;
->>>>>>> 50d12d5ed2c1736f0a4b1343c99c791784946935
+int level = L_MENU;
 int resetLevel;
 
 
@@ -176,6 +175,8 @@ void setup() {
   // Use Minim library
   minim = new Minim(this);
   song = minim.loadFile("sound/background.mp3");
+  foodSound = minim.loadFile("sound/food.wav");
+  clickSound = minim.loadFile("sound/click.mp3");
 
   titleImage= loadImage("img/title.png");
   titleImage.resize(350, 200);
@@ -282,21 +283,21 @@ void draw() {
     nextButton.show();
     color menuColor = color(#9B8F93);
     background(menuColor);
-    image(story_1_1, 320, 150);
+    image(story_1_1, 180, 10, 800, 600);
   }
 
   if (level == L_1_2) {
     nextButton.show();
     color menuColor = color(#9B8F93);
     background(menuColor);
-    image(story_1_2, 320, 150);
+    image(story_1_2, 180, 10, 800, 600);
   }
 
   if (level == L_1_3) {
     nextButton.show();
     color menuColor = color(#9B8F93);
     background(menuColor);
-    image(story_1_3, 200, 50, width/1.5, height/1.5);
+    image(story_1_3, 200, 10, width/1.5, 600);
   }
 
   // ---------------- LEVEL 1 --------------------
@@ -306,7 +307,7 @@ void draw() {
     setText();
 
     // check food is collected or not
-    if (foods2.size() == 4) {
+    if (foods2.size() == 0) {
       door2.ver = 2;
       isDoorOpen = true;
     } else {
@@ -325,10 +326,12 @@ void draw() {
 
     for (int i=0; i<foods2.size(); i++) {
       Food f = foods2.get(i);
-      f.update();
+      f.update2();
 
       boolean foodCollision = collectCollision(player2, f);
       if (foodCollision) {
+        foodSound.rewind();
+        foodSound.play();
         foodNum++;
         foods2.remove(i);
       }
@@ -352,7 +355,7 @@ void draw() {
     // Check the collision of player and platform & DIsplay the platform
     for (int i = 0; i < platforms2.size(); i++) {
       Platform p = platforms2.get(i);
-      p.update();
+      p.update3();
 
       rectangleCollisions(player2, p);
       player2.checkPlatforms();
@@ -364,7 +367,7 @@ void draw() {
     nextButton.show();
     color menuColor = color(#9B8F93);
     background(menuColor);
-    image(story_2_1, 200, 50, width/1.5, height/1.5);
+    image(story_2_1, 200, 10, width/1.5, 600);
   }
 
   // --------------- LEVEL 2 -------------------
@@ -373,6 +376,16 @@ void draw() {
     nextButton.hide();
     bg.display();
     door.update();
+
+    // check food is collected or not
+    if (foods.size() == 0) {
+      door.ver = 2;
+      isDoorOpen = true;
+    } else {
+      door.ver = 1;
+      isDoorOpen = false;
+    }
+
     player.update();
 
     // Check the collision of player and platform & DIsplay the platform
@@ -391,6 +404,8 @@ void draw() {
 
       boolean foodCollision = collectCollision(player, f);
       if (foodCollision) {
+        foodSound.rewind();
+        foodSound.play();
         foodNum++;
         foods.remove(i);
       }
@@ -401,6 +416,8 @@ void draw() {
     if (doorCollision) {
       if (isDoorOpen) {
         isTouchDoor = true;
+      } else {
+        isTouchDoor = false;
       }
     }
 
@@ -414,10 +431,8 @@ void draw() {
       boolean enemyCollision = enemyCollision(player, e);
       if (enemyCollision) {
         player.health--;
-        println("Hit by enemy and Lose Health in Level 2");
       }
       if (isBottomTouch) {
-        println("hit");
         enemies1.remove(i);
         isBottomTouch = false;
       }
@@ -437,7 +452,7 @@ void draw() {
     nextButton.show();
     color menuColor = color(#9B8F93);
     background(menuColor);
-    image(story_3_1, 200, 50, width/1.5, height/1.5);
+    image(story_3_1, 200, 10, width/1.5, 600);
   }
 
   // --------------- LEVEL 3 -------------------
@@ -446,13 +461,38 @@ void draw() {
     bg3.display3();
     setText();
     door3.update();
+
+
+    // Display the foods
+    for (int i=0; i<foods3.size(); i++) {
+      Food f = foods3.get(i);
+      f.update();
+
+      boolean foodCollision = collectCollision(player3, f);
+      if (foodCollision) {
+        foodSound.rewind();
+        foodSound.play();
+        foodNum++;
+        foods3.remove(i);
+      }
+    }
+
+    // check food is collected or not
+    if (foods3.size() == 0) {
+      door3.ver = 2;
+      isDoorOpen = true;
+    } else {
+      door3.ver = 1;
+      isDoorOpen = false;
+    }
+
     player3.update();
     player3.display();
 
     // Check the collision of player and platform & DIsplay the platform
     for (int i = 0; i < platforms3.size(); i++) {
       Platform p = platforms3.get(i);
-      p.update();
+      p.update2();
 
       rectangleCollisions(player3, p);
       player3.checkPlatforms();
@@ -461,8 +501,6 @@ void draw() {
 
     // Check the boundaries
     player3.checkBoundaries();
-
-
 
     // Check the player touch the door
     boolean doorCollision = doorCollision(player3, door3);
@@ -492,26 +530,8 @@ void draw() {
       player3.health--;
     }
 
-    // Display the enemies
-    for (int i=0; i<enemies3.size(); i++) {
-      Enemy e = enemies3.get(i);
-      e.display();
-      e.update1();
-
-      boolean enemyCollision = enemyCollision(player3, e);
-      if (enemyCollision) {
-        isOver = true;
-      }
-    }
-
     if ( player3.health == 0) {
       isOver = true;
-    }
-
-    // Show the drops in the level 3
-    for (int i=0; i<drops.length; i++) {
-      drops[i].display();
-      drops[i].fall();
     }
   }
 
@@ -546,15 +566,15 @@ void draw() {
     image(overImage, 420, 280);
   }
 
-  // --------------- LEVEL OVER -------------------
+  // --------------- LEVEL WIN -------------------
   if (level == L_WIN) {
     color menuColor = color(#9B8F93);
     background(menuColor);
     playAgainButton.show();
     exitButton.show();
 
+    image(winImage, 0, 0, width, height);
     image(winTitleImage, 260, 20);
-    image(winImage, 300, 280);
   }
 }
 
@@ -631,9 +651,16 @@ Boolean collectCollision(Player cp, Food cf) {
   float player_y_top = (cf.y-cf.h/2)-(cp.y+cp.h);
   float player_y_bottom = (cp.y) - (cf.y+cf.h/2);
 
-  if (player_x_left <= 0 && player_x_right <= 0 && player_y_top <=0 && player_y_bottom <=0) {
-    return true;
+  if (level != L_ONE) {
+    if (player_x_left <= 0 && player_x_right <= 0 && player_y_top <=0 && player_y_bottom <=0) {
+      return true;
+    }
+  } else {
+    if (player_x_left <= 0 && player_x_right <= 0 && player_y_top <=20 && player_y_bottom <=20) {
+      return true;
+    }
   }
+
   return false;
 }
 
@@ -645,8 +672,7 @@ Boolean enemyCollision(Player ep, Enemy ee) {
 
   if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0 && ep.vy>2) {
     isBottomTouch = true;
-  }
-  else if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0) {
+  } else if (player_x_left <= 0 && player_x_right <= 0 && player_y_top<=0 && player_y_bottom <=0) {
     return true;
   }
   return false;
@@ -699,47 +725,58 @@ void setText() {
   if (level == L_TWO) {
     num = 5;
   }
+  if (level == L_THREE) {
+    num = 7;
+  }
   String s = "FOOD: " + foodNum + " " + "/" + " " + num;
   String s2 = "LEVEL:  " + level;
   textSize(24);
-  fill(0);
-  if (level != L_THREE) {
-    text(s, 900, 30);
+  if (foodNum != num) {
+    if (level != L_THREE) {
+      fill(255);
+    } else {
+      fill(0);
+    }
+  } else {
+    fill(255, 0, 0);
   }
-
+  text(s, 900, 30);
+  if (level != L_THREE) {
+    fill(255);
+  } else {
+    fill(0);
+  }
   text(s2, 30, 30);
 }
 
 // Generate and reset the game
 // Generate all the items in the level 1
 void generateLevel1() {
-  channel2 = new Platform(0, 400, 100, 50, 0, 0, 4);
-  player2 = new Player(50, 350, 50, 50, 0, 0);
+  channel2 = new Platform(-30, 100, 100, 50, 0, 0, 4);
+  player2 = new Player(30, 50, 50, 50, 0, 0);
+  door2 = new Door(950, 550, 60, 80, 0, 1);
   foods2 = new ArrayList<Food>();
 
   platforms2 = new ArrayList<Platform>();
   platforms2.add(new Platform(250, 400, 200, 75, -3, 0, 8));
   platforms2.add(new Platform(750, 400, 200, 75, -3, 0, 8));
   platforms2.add(new Platform(500, 250, 200, 75, -3, 0, 8));
-  foods2.add(new Food(880, 420, 25, 25, -3, 0, 1));
+
   foods2.add(new Food(380, 420, 25, 25, -3, 0, 1));
-  //platforms2.add(new Platform(650, 100, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(350, -50, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(750, -200, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(500, -350, 200, 75, -2.5, speed, 8));
-  //foods2.add(new Food(300, -525, 25, 25, 0, 0.5, 1));
-  //foods2.add(new Food(300, -550, 25, 25, 0, 0.5, 1));
-  //foods2.add(new Food(300, -575, 25, 25, 0, 0.5, 1));
-  //platforms2.add(new Platform(200, -500, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(450, -650, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(750, -800, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(500, -950, 200, 75, 0, speed, 8));
-  //platforms2.add(new Platform(300, -1100, 200, 75, -3, speed, 8));
-  //foods2.add(new Food(600, -975, 25, 25, 0, 0.5, 1));
-  //platforms2.add(new Platform(250, -1250, 200, 75, 0, speed, 8));
-  door2 = new Door(800, 200, 60, 80, 0, 1);
+  foods2.add(new Food(880, 420, 25, 25, -3, 0, 1));
+  foods2.add(new Food(620, 270, 25, 25, -3, 0, 1));
 }
 
+// Remove all the items in the level one
+void removeItemsInLevel1() {
+  for (int i=platforms2.size()-1; i>=0; i--) {
+    platforms2.remove(i);
+  }
+
+  for (int j=foods2.size()-1; j>=0; j--) {
+    foods2.remove(j);
+  }
+}
 
 // Generate all the items in the level 2
 void generateLevel2() {
@@ -776,25 +813,6 @@ void generateLevel2() {
   door = new Door(850, -330, 60, 80, speed, 1);
 }
 
-// Remove all the items in the level one
-void removeItemsInLevel1() {
-  for (int i=platforms2.size()-1; i>=0; i--) {
-    platforms2.remove(i);
-  }
-
-  for (int j=foods2.size()-1; j>=0; j--) {
-    foods2.remove(j);
-  }
-
-  //for (int j=seaweads.size()-1; j>=0; j--) {
-  //  seaweads.remove(j);
-  //}
-
-  //for (int j=enemies2.size()-1; j>=0; j--) {
-  //  enemies2.remove(j);
-  //}
-}
-
 // Remove all the items in the level two
 void removeItemsInLevel2() {
   for (int i=platforms.size()-1; i>=0; i--) {
@@ -816,19 +834,33 @@ void generateLevel3() {
   player3 = new Player(250, 350, 50, 50, 0, 0);
   player3.vy = 5;
   platforms3 = new ArrayList<Platform>();
+  foods3 = new ArrayList<Food>();
 
   float speed = 1.2;
 
+  foods3.add(new Food(350, 400, 25, 25, 0, speed, 3));
+
+  foods3.add(new Food(700, 100, 25, 25, 0, speed, 3));
+
+  foods3.add(new Food(450, -50, 25, 25, 0, speed, 3));
+
+  foods3.add(new Food(850, -200, 25, 25, 0, speed, 3));
+
+  foods3.add(new Food(550, -350, 25, 25, 0, speed, 3));
+
+  foods3.add(new Food(300, -500, 25, 25, 0, speed, 3));
+
+  foods3.add(new Food(550, -650, 25, 25, 0, speed, 3));
+
   platforms3.add(new Platform(250, 400, 200, 25, 0, speed, 5));
-  platforms3.add(new Platform(750, 400, 200, 25, 0, speed, 6));
-  platforms3.add(new Platform(500, 250, 200, 25, 0, speed, 7));
+  platforms3.add(new Platform(500, 250, 200, 25, -1, speed, 7));
   platforms3.add(new Platform(650, 100, 200, 25, 0, speed, 5));
   platforms3.add(new Platform(350, -50, 200, 25, 0, speed, 6));
   platforms3.add(new Platform(750, -200, 200, 25, 0, speed, 7));
   platforms3.add(new Platform(500, -350, 200, 25, 0, speed, 5));
   platforms3.add(new Platform(200, -500, 200, 25, 0, speed, 6));
   platforms3.add(new Platform(450, -650, 200, 25, 0, speed, 7));
-  platforms3.add(new Platform(750, -800, 200, 25, 0, speed, 5));
+  platforms3.add(new Platform(750, -800, 200, 25, -3, speed, 5));
   platforms3.add(new Platform(500, -950, 200, 25, 0, speed, 7));
   platforms3.add(new Platform(300, -1100, 200, 25, 0, speed, 6));
   platforms3.add(new Platform(250, -1250, 200, 25, 0, speed, 5));
@@ -836,9 +868,6 @@ void generateLevel3() {
 
   // initiallize antlion
   antlion = new Antlion(300, 600, 500, 500, 0, 0);
-
-
-  enemies3 = new ArrayList<Enemy>();
 }
 
 //Remove all the items in the level 3
@@ -846,6 +875,12 @@ void removeItemsInLevel3() {
   for (int i=platforms3.size()-1; i>=0; i--) {
     platforms3.remove(i);
   }
+
+  for (int i=foods3.size()-1; i>=0; i--) {
+    foods3.remove(i);
+  }
+
+  antlion = null;
 }
 
 
@@ -904,9 +939,11 @@ void levelCheck() {
 void controlEvent(CallbackEvent event) {
   // if the there is click event for the ControlP5 widgets 
   if (event.getAction() == ControlP5.ACTION_CLICK) {
+    clickSound.rewind();
+    clickSound.play();
+
     // switch the Controller name based on their adress in the memory
     switch(event.getController().getAddress()) {
-
       // If the play button is pressed
     case "/Start":
       isPlaying = true;

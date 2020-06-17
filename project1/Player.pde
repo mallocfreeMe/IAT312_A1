@@ -11,12 +11,13 @@ class Player {
   boolean facingRight;
   int frameSequence;
   PImage img;
+  PImage img2;
   int health;
   boolean invisible;
   int startTime;
   int timeOut;
   int count;
-
+  boolean goLeft, goRight;
 
   Player(float x, float y, float w, float h, float vx, float vy) {
     this.x = x;
@@ -46,69 +47,7 @@ class Player {
     frameSequence = 6;
 
     img = loadImage("img/playerRight.png");
-  }
-
-  // --------------- For the LEVEL 1 & 3
-  void update() {
-    if (left) {
-      accX = -0.1;
-      friction = 1;
-      facingRight = false;
-    }
-    if (right) {
-      accX = 0.1;
-      friction = 1;
-      facingRight = true;
-    }
-    if (!left&&!right) {
-      accX = 0;
-      friction = 0.96;
-      gravity = 0.3;
-    } else if (left&&right) {
-      // vx=0;
-      accX = 0;
-      friction = 0.96;
-      gravity = 0.3;
-    }
-    if (up && isOnGround) {
-      vy += jumpForce;
-      isOnGround = false;
-      friction = 0.5;
-      //isOver=true;
-    }
-
-    vx += accX;
-    vy += accY;
-
-    // apply the forces
-    if (isOnGround) {
-      vx *= friction;
-    }
-    vy += gravity;
-
-    // correct for maximum speeds
-    if (vx > speedLimit) {
-      vx = speedLimit;
-    }
-    if (vx < -speedLimit) {
-      vx = -speedLimit;
-    }
-    if (vy > speedLimit * 2) {
-      vy = speedLimit;
-    }
-
-
-    // --------------------------- Player die when he touch the bottom ------------------------------------   
-    if (h + y <= h) {
-      isOver = true;
-    }
-
-    // ------------------------------------------------------------------------------------------------------
-
-
-    ////move the player
-    x+=vx;
-    y+=vy;
+    img2 = loadImage("img/playerLeft.png");
   }
 
   void checkPlatforms() {
@@ -153,7 +92,17 @@ class Player {
 
 
   void display() {
-    image(img, x, y, w, h);
+    if (!goLeft && goRight) {
+      image(img, x, y, w, h);
+    }
+
+    if (goLeft && !goRight) {
+      image(img2, x, y, w, h);
+    }
+
+    if (!goLeft && !goRight) {
+      image(img, x, y, w, h);
+    }
 
     if (abs(vx)>1 && isOnGround) {
       currentFrame = (currentFrame+1)%frameSequence;
@@ -162,14 +111,18 @@ class Player {
     }
   }
 
-  // ------------- The end of LEVEL 1 & 3
-
-
-
-  // ------------- For the LEVEL 2
-
   void display2() {
-    image(img, x, y, w, h);
+    if (!goLeft && goRight) {
+      image(img, x, y, w, h);
+    }
+
+    if (goLeft && !goRight) {
+      image(img2, x, y, w, h);
+    }
+
+    if (!goLeft && !goRight) {
+      image(img, x, y, w, h);
+    }
   }
 
   void fall() {
@@ -182,11 +135,17 @@ class Player {
     if (keyPressed) {
       if (keyCode == UP) {
         vy = -1;
+        goLeft = false;
+        goRight = false;
       }
       if (keyCode == RIGHT) {
+        goLeft = false;
+        goRight = true;
         vx = 0.5;
       }
       if (keyCode == LEFT) {
+        goLeft = true;
+        goRight = false;
         vx = -0.5;
       }
     }
@@ -196,14 +155,83 @@ class Player {
     if (keyPressed) {
       if (keyCode == UP) {
         vy = -5;
+        goLeft = false;
+        goRight = false;
       }
       if (keyCode == RIGHT) {
         vx = 2;
+        goLeft = false;
+        goRight = true;
       }
       if (keyCode == LEFT) {
         vx = -2;
+        goLeft = true;
+        goRight = false;
       }
     }
+  }
+
+  // --------------- For the LEVEL 1 & 3
+  void update() {
+    if (left) {
+      accX = -0.1;
+      friction = 1;
+      facingRight = false;
+      goLeft = true;
+      goRight = false;
+    }
+    if (right) {
+      accX = 0.1;
+      friction = 1;
+      facingRight = true;
+      goLeft = false;
+      goRight = true;
+    }
+    if (!left&&!right) {
+      accX = 0;
+      friction = 0.96;
+      gravity = 0.3;
+      goLeft = false;
+      goRight = false;
+    } else if (left&&right) {
+      accX = 0;
+      friction = 0.96;
+      gravity = 0.3;
+    }
+    if (up && isOnGround) {
+      vy += jumpForce;
+      isOnGround = false;
+      friction = 0.5;
+      //isOver=true;
+    }
+
+    vx += accX;
+    vy += accY;
+
+    // apply the forces
+    if (isOnGround) {
+      vx *= friction;
+    }
+    vy += gravity;
+
+    // correct for maximum speeds
+    if (vx > speedLimit) {
+      vx = speedLimit;
+    }
+    if (vx < -speedLimit) {
+      vx = -speedLimit;
+    }
+    if (vy > speedLimit * 2) {
+      vy = speedLimit;
+    }
+
+    if (h + y <= h) {
+      isOver = true;
+    }
+
+    ////move the player
+    x+=vx;
+    y+=vy;
   }
 
   void update2() {

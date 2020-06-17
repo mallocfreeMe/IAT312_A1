@@ -5,8 +5,8 @@ class Platform {
 
   PImage img1, img2, img3, img4, img5, img6, img7, img8;
 
-  Platform(float x, float y, float w, float h, float vx, float vy, int version){
-//>>>>>>> Stashed changes
+  Platform(float x, float y, float w, float h, float vx, float vy, int version) {
+    //>>>>>>> Stashed changes
     this.w = w;
     this.h = h;
     this.x = x;
@@ -57,23 +57,33 @@ class Platform {
       break;
     }
   }
-  
-  
-  void update(){
+
+  // out of screen
+  void update() {
     x += vx;
     y += vy;
     display();
-    
   }
   
-  void update2(){
+  // bounce back
+  void update2() {
+    x += vx;
+    y += vy;
+    display();
+
+    if (x<=0 || x+w>=width) {
+      vx *= -1;
+    }
+  }
+  
+  // go from another direction
+  void update3() {
     x += vx;
     y += vy;
     display();
     
-    if(x<=0 || x+w>=width) {
-      vx *= -1;
+    if(x + w < 0) {
+      x = width - x; 
     }
-    
   }
 }
