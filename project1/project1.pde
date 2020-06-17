@@ -430,7 +430,7 @@ void draw() {
 
       boolean enemyCollision = enemyCollision(player, e);
       if (enemyCollision) {
-        player.health--;
+        isOver = true;
       }
       if (isBottomTouch) {
         enemies1.remove(i);
